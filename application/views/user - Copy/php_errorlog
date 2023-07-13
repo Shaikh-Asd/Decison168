@@ -1,0 +1,4 @@
+[14-Sep-2022 12:14:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function base_url() in /home/customer/www/dev.decision168.com/public_html/application/views/user/footer_links.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/customer/www/dev.decision168.com/public_html/application/views/user/footer_links.php on line 2

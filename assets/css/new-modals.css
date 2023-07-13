@@ -1,0 +1,157 @@
+#new_Modal_Design *, .modals:before, .modals:after {
+  box-sizing: border-box;
+  margin: 0;
+  transition: 0.4s;
+}
+
+#new_Modal_Design .modals {
+  height: 400px;
+  width: 650px;
+  margin: auto;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: 0.4s, box-shadow 0.3s 0.4s;
+  z-index: 1050;
+  border-radius: 0.4rem;
+}
+
+#new_Modal_Design .modals.hidden {
+  box-shadow: none;
+  transition: 0.4s, box-shadow 0s;
+  opacity: 0;
+  visibility: hidden;
+}
+#new_Modal_Design .modals.hidden .form {
+  top: 100%;
+}
+#new_Modal_Design .modals.hidden .invite {
+  top: -100%;
+}
+#new_Modal_Design .modals.hidden .invite .close {
+  height: 0;
+  width: 0;
+  top: 0;
+  right: 0;
+}
+
+.form, .invite {
+  background: #383838;
+  width: 50%;
+  height: 100%;
+  padding: 25px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#new_Modal_Design .modals input,#new_Modal_Design .modals textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 15px 0;
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  font-size: 13px;
+}
+
+#new_Modal_Design .modals label {
+  font: 500 14px Roboto;
+  color: #c5dc1c;;
+}
+
+.invite {
+  background: linear-gradient(-45deg, #a3bd53, #c7df19);
+  left: 50%;
+  color: #fff;
+}
+
+#new_Modal_Design .modals h3 {
+  font: 30px Roboto;
+  text-transform: uppercase;
+  color: #fff;
+
+}
+
+.nope {
+  background: #474747;
+  padding: 5px 12px;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+.nope:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%);
+}
+
+.close {
+  background: #474747;
+  height: 30px;
+  width: 30px;
+  border: 3px solid #FFF;
+  border-radius: 50%;
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  cursor: pointer;
+  transition: 0.4s 0.3s;
+}
+.close:before, .close:after {
+  content: "";
+  background: #FFF;
+  height: 80%;
+  width: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.close:after {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.open {
+  background: linear-gradient(-45deg, #a6b534, #c7df19);
+  height: 45px;
+  width: 150px;
+  padding: 10px 20px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 20px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+}
+.open.active {
+  opacity: 1;
+  visibility: visible;
+}
+.open:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (max-width: 425px){
+    #new_Modal_Design .modals {
+  height: 400px;
+  width: 320px;
+}
+#new_Modal_Design .modals h3 {
+    font: 18px Roboto;
+    }
+}

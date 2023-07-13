@@ -1,0 +1,357 @@
+.new_card {
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    height: 160px;
+    margin-bottom: 15px;
+    perspective: 2000px;
+    transition: margin 0.4s 0.1s;
+}
+
+.new_card.no-transition * {
+  transition: all 0s 0s !important;
+}
+.new_card.theme-purple .new_card__face__colored-side {
+  background: #BA68C8;
+}
+.new_card .new_card__face__path.theme-purple {
+  background: repeating-linear-gradient(#c7df19, #c7df19 3px, transparent 3px, transparent 6px);
+  border-color: #c7df19;
+}
+.new_card.theme-purple .new_card__header {
+  background: #BA68C8;
+}
+.new_card.theme-purple .new_card__sender__rating__star {
+  color: #BA68C8;
+}
+.new_card.theme-purple .new_card__path-big {
+  background: repeating-linear-gradient(#BA68C8, #BA68C8 3px, transparent 3px, transparent 6px);
+  border-color: #BA68C8;
+}
+.new_card.theme-green .new_card__face__colored-side {
+  background: #a3bd53;
+}
+.new_card .new_card__face__path.theme-green {
+  background: repeating-linear-gradient(#a3bd53, #a3bd53 3px, transparent 3px, transparent 6px);
+  border-color: #a3bd53;
+}
+.new_card.theme-green .new_card__header {
+  background: #52A43A;
+}
+.new_card.theme-green .new_card__sender__rating__star {
+  color: #52A43A;
+}
+.new_card.theme-green .new_card__path-big {
+  background: repeating-linear-gradient(#52A43A, #52A43A 3px, transparent 3px, transparent 6px);
+  border-color: #52A43A;
+}
+.new_card.theme-orange .new_card__face__colored-side {
+  background: #383838;
+}
+.new_card .new_card__face__path.theme-orange {
+  background: repeating-linear-gradient(#F7AA17, #F7AA17 3px, transparent 3px, transparent 6px);
+  border-color: #F7AA17;
+}
+.new_card.theme-orange .new_card__header {
+  background: #F7AA17;
+}
+.new_card.theme-orange .new_card__sender__rating__star {
+  color: #F7AA17;
+}
+.new_card.theme-orange .new_card__path-big {
+  background: repeating-linear-gradient(#F7AA17, #F7AA17 3px, transparent 3px, transparent 6px);
+  border-color: #F7AA17;
+}
+.new_card.theme-red .new_card__face__colored-side {
+  background:#c7df19;
+}
+.new_card .new_card__face__path.theme-red {
+  background: repeating-linear-gradient(#EF5350, #EF5350 3px, transparent 3px, transparent 6px);
+  border-color: #EF5350;
+}
+.new_card.theme-red .new_card__header {
+  background: #EF5350;
+}
+.new_card.theme-red .new_card__sender__rating__star {
+  color: #EF5350;
+}
+.new_card.theme-red .new_card__path-big {
+  background: repeating-linear-gradient(#EF5350, #EF5350 3px, transparent 3px, transparent 6px);
+  border-color: #EF5350;
+}
+
+.new_card__part {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    border-radius: 11px;
+    transform-origin: 50% 0;
+    transform-style: preserve-3d;
+}
+.new_card__part__side {
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: #fff;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+.new_card__part__side.m--back {
+    transform: rotateX(180deg);
+}
+.new_card__part-1 {
+    top: 0;
+    height: 100%;
+    transition: all 0.25s;
+    transform: translateZ(-3px);
+}
+.new_card__part-2 {
+    z-index: 6;
+    top: 100%;
+    height: 100%;
+    transform: rotateX(179deg) translateZ(3px);
+    transition: transform 0.5s ease-out, border-radius 0.25s;
+}
+.new_card__part-2 > .m--back {
+    overflow: hidden;
+    cursor: pointer;
+}
+.new_card__part-2 > .m--back--c {
+    cursor: url(../images/icons/drag.png), move;
+}
+.new_card__part-3 {
+    top: 100%;
+    height: 70px;
+    transform: rotateX(179deg) translateZ(-3px);
+    transition: transform 0.5s, border-radius 0s 0.5s;
+}
+.new_card__part-3 > .m--back {
+    background: #f7eff7;
+}
+.new_card__part-4 {
+    top: 100%;
+    height: 70px;
+    transform: rotateX(179deg) translateZ(0);
+    transition: transform 0.5s, border-radius 0s 0s, height 0.5s;
+}
+.new_card__part-4 > .m--back {
+    background: #f7eff7;
+}
+.new_card__part__inner {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    border-radius: inherit;
+}
+.new_card__face {
+    padding: 20px 20px 15px;
+}
+.new_card__face:after {
+    content: "";
+    z-index: 5;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 60%, #fff 100%);
+}
+.new_card__face__colored-side {
+    z-index: -1;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 7px;
+    height: 100%;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+    transition: width 0.3s;
+}
+.new_card__face:hover .new_card__face__colored-side {
+    width: 80px;
+}
+.new_card__face__price {
+    margin-top: -3px;
+    font-weight: 400;
+    font-size: 22px;
+    color: #555a5f;
+    transition: color 0.3s;
+}
+.new_card__face:hover .new_card__face__price {
+    color: #fff;
+}
+.new_card__face__divider {
+    position: absolute;
+    left: 80px;
+    top: 10px;
+    width: 1px;
+    height: calc(100% - 20px);
+    background: #ececec;
+}
+.new_card__face__path {
+    position: absolute;
+    left: 105px;
+    top: 36px;
+    width: 2px;
+    height: 23px;
+}
+.new_card__face__path:after,
+.new_card__face__path:before {
+    content: "";
+    position: absolute;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 2px solid;
+    border-color: inherit;
+}
+.new_card__face__path:before {
+    top: -11px;
+}
+.new_card__face__path:after {
+    bottom: -9px;
+}
+.new_card__face__from-to {
+    position: absolute;
+    left: 120px;
+    top: 20px;
+    width: 300px;
+    color: #555a5f;
+    font-size: 13px;
+}
+.new_card__face__from-to:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 40%;
+    width: 100%;
+    height: 1px;
+    background: #ececec;
+}
+.new_card__face__from-to p:first-child {
+    margin-bottom: 15px;
+}
+.new_card__face__from-to2 {
+    position: absolute;
+    left: 120px;
+    top: 20px;
+    width: 300px;
+    color: #555a5f;
+    font-size: 13px;
+}
+.new_card__face__from-to2:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 20%;
+    width: 100%;
+    height: 1px;
+    background: #ececec;
+}
+.new_card__face__from-to2 p:first-child {
+    margin-bottom: 15px;
+}
+
+.new_card__face__deliv-date {
+    position: absolute;
+    left: 14px;
+    top: 105px;
+    color: #9a9e9e;
+    text-transform: uppercase;
+    font-size: 12px;
+    transition: color 0.3s;
+}
+.new_card__face__deliv-date p {
+    color: #606568;
+    transition: color 0.3s;
+}
+.new_card__face:hover .new_card__face__deliv-date {
+    color: rgba(255, 255, 255, 0.8);
+}
+.new_card__face:hover .new_card__face__deliv-date p {
+    color: #fff;
+}
+.new_card__face__stats {
+    position: absolute;
+    top: 105px;
+    color: #b5b5b5;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+.new_card__face__stats p {
+    font-size: 12px;
+    color: #adadad;
+    font-weight: 700;
+}
+.new_card__face__stats--req {
+    left: 100px;
+}
+.new_card__face__stats--pledge {
+    left: 190px;
+}
+.new_card__face__stats--weight {
+    left: 270px;
+}
+.new_card__face__stats--weight p {
+    text-transform: lowercase;
+}
+.new_card__stats {
+    position: relative;
+    height: 120px;
+    background-size: cover;
+    background-position: center center;
+    transition: opacity 0.6s;
+}
+.new_card__stats:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+.new_card__from-to {
+    position: relative;
+    height: 70px;
+    padding: 10px 10px 0;
+}
+.new_card__from-to__inner {
+    position: relative;
+    height: 100%;
+}
+.new_card__from-to__inner:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -10px;
+    width: 100%;
+    height: 1px;
+    background: #ececec;
+}
+
+.popover {
+border: 2px dotted #c7df19;
+}
+
+.eye_preview {
+    padding-left: 21px;
+    padding-top: 21px;
+}
+
+.bell_preview {
+    padding-left: 4px;
+    padding-top: 21px;
+    color: #383838 !important;
+}
+
+.draggable_area_cus {
+    min-height: 800px;
+}
