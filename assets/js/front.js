@@ -10318,7 +10318,7 @@ function ProjectCommentNotificationClearYes(id){
        }
 
 function AllNotificationClearYes(){    
-//debugger;       
+debugger;       
     Swal.fire({
           title: "Are you sure?",
           text: "You want to Clear All Notification",

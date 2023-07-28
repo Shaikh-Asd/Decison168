@@ -15032,7 +15032,7 @@ function checkUserReportTemplate($id)
     {
     	$this->db->where('reg_acc_status !=','deactivated');
     	$this->db->where('portfolio_id',$port_id);
-    	$this->db->where('nid','2');
+    	// $this->db->where('nid','2');
     	// $this->db->where('nmember',$this->session->userdata('d168_id'));
 
 		// $this->db->group_start();	
@@ -15043,7 +15043,7 @@ function checkUserReportTemplate($id)
 		// $this->db->group_start();
 		// $this->db->where('nmember',$this->session->userdata('d168_id'));
 
-		$this->db->where('ncreated_by',$this->session->userdata('d168_id'));
+		$this->db->where('nmember',$this->session->userdata('d168_id'));
 		// $this->db->group_end();
 
     	// $this->db->where('pid',$pid);
@@ -15055,6 +15055,7 @@ function checkUserReportTemplate($id)
 	{
 		$this->db->where('nm.nmember',$this->session->userdata('d168_id'));
 		$this->db->where('nm.status', 'send');
+		$this->db->where('nm.sent_notify_clear', 'no');
 		$this->db->select('*');
         $this->db->from('notes_members as nm');
         $this->db->join('notes as e','e.id = nm.nid');
@@ -15081,6 +15082,14 @@ function checkUserReportTemplate($id)
 			return FALSE;
 		}
 	}
+
+	function get_notefilebySessID()
+    {
+    	$this->db->where('reg_acc_status !=','deactivated');
+    	$this->db->where('status_notify_clear =','');
+        $query = $this->db->get('notes_members');
+        return $query->result();
+    }
 
   // Notes work end
 

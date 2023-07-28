@@ -445,7 +445,7 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
 
                                                     </div>
                                                     <div class="mb-3 col-md-6">
-                                                        <label class="col-form-label">Estimate Time<span class="text-danger">*</span> (For example: XhXm)</label>
+                                                        <label class="col-form-label">Estimated Time<span class="text-danger">*</span> (For example: XhXm)</label>
                                                         <input class="form-control" name="estimated_time" id="estimated_time" type="text" placeholder="Enter time in hour format" required />
                                                             <div id="suggestionContainer"></div>    
                                                         <span id="estimated_timeErr" class="text-danger"></span>

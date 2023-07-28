@@ -409,7 +409,7 @@ if(($this->session->flashdata('al_message')) && ($this->session->flashdata('al_m
                                                         {
                                                             ?>
                                                             <tr>
-                                                                <td>
+                                                                <td style="width: 25%;">
                                                                     <div class="row">
                                                                         <div class="col-2">
                                                                     <?php

@@ -27849,6 +27849,24 @@ if($check_portfolio_name)
   {
     if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
     {
+
+    //New note notification    
+    $get_newNotebySessID = $this->Front_model->get_notefilebySessID();
+    
+    if($get_newNotebySessID)
+    {
+      foreach($get_newNotebySessID as $nnt)
+      {
+        $id0 = $nnt->nm_id;
+        $data0 = array(
+                'status_notify_clear' => 'yes',
+                'sent_notify_clear' => 'yes',
+            );
+        $data0 = $this->security->xss_clean($data0); // xss filter
+        $this->Front_model->updateNoteMem($data0,$id0);
+      }
+    }
+
     //New task notification
     $get_newTaskbySessID = $this->Front_model->get_newTaskbySessID();
       if($get_newTaskbySessID)
@@ -69579,8 +69597,6 @@ public function downloadUserReport()
     if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
     {
       $get_reminder = $this->Front_model->getTaskByFlag();
-      // echo json_encode($get_reminder); 
-      // print_r($get_reminder);
 
       if($get_reminder)
   {
@@ -69594,9 +69610,6 @@ public function downloadUserReport()
         $timer_salert_status = $reminder['timer_salert_status'];
         $tid = $reminder['tid'];
         $sid = $reminder['stid'];
-
-        // print_r($timer_salert_status);
-        // die();
 
         if($reminder_task == '1'){
 
@@ -69664,10 +69677,6 @@ public function downloadUserReport()
 
             // Check if both times are the same or not
             if ($estimatedTimeMinutes === $trackedTimeMinutes) {
-          //     echo "Both times are the same.";
-          //   } 
-
-          // if($reminder_estimateTask ==  $counter ){
 
             if($timer_alert_status == '0' ){
 
@@ -69753,8 +69762,6 @@ public function downloadUserReport()
                   }
                 }
                 $subtimer_task = trim($subtimer_task);
-
-                // echo $subtimer_task;
                 
                 $subcounter = $subtimer_task; // Replace subtimer_task with your actual subcounter value
                 $subdigits = explode(':', (string)$subcounter); // Split the string at each colon
@@ -69815,12 +69822,6 @@ public function downloadUserReport()
                   echo "Both times are not the same.";
               }
               }
-              // else{
-              //   // echo 'No data found';
-              //   $response['no_data'] =  'No data found';
-              //   header('Content-type: application/json');
-              //   exit(json_encode($response));
-              // }
                 }
 
     }
@@ -72783,7 +72784,7 @@ public function downloadUserReport()
           }
           else
             {
-                    $response['status'] = 'Empty_TMember';
+                    $response['status'] = 'Empty_NMember';
                     header('Content-type: application/json');
                     echo json_encode($response);
             }
@@ -72808,6 +72809,7 @@ public function downloadUserReport()
       {
       $data = array(
        'sent_notify_clear' => 'yes',
+       'status_notify_clear' => 'yes',
       );
         $data = $this->security->xss_clean($data); // xss filter
         $this->Front_model->updateNoteMem($data,$nid);

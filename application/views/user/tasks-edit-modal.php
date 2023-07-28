@@ -213,7 +213,7 @@ if($tdetail)
                                                     </div>
                                                     <div class="mb-3 col-md-6">
                                                     <div class="form-group mb-2">
-                                                        <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
+                                                        <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span> (For example: XhXm)</label>
                                                         <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
                                                         <div id="suggestionContainer"></div>    
 

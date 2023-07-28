@@ -240,7 +240,7 @@
                             $dateTime = new DateTime($dateString);
                             $newTime = $dateTime->format("h:i A");
                            ?>
-                           <div class="note-list note-line_<?php echo $note->id ?>" onclick="noteView(<?php echo $note->id.','.$nm->access ?>)">
+                           <div class="note-list note-line_<?php echo $note->id ?>" onclick="noteView(<?php echo $note->id.','.$note->access ?>)">
                              <a style="font-size: 16px; font-weight: 1000; color: #000;" href="javascript: void(0);" class="" ><?php echo $title;?></a>
                              <span style="margin-left: 5px; font-weight: 1000; color: #000;"><?php echo $newTime;?></span>
                              <span><?php echo strip_tags($title_new);?></span>
@@ -392,23 +392,26 @@
                   Create<i class="fas fa-calendar-alt text-d ms-1 new_cursor_editable" onclick="showEditTduedateModal(9);"></i>
                   <p class="ng-binding" id="task-duedate9"><?php echo $newDate?></p>
                 </div>
+               <?php
+               print_r($note->access);
+               if($note->user_id == $this->session->userdata('d168_id')){
+                  ?>
+
                <div class="new_card__face__stats new_card__face__stats--req">
                   <p class="ng-binding"></p>
                   <div class="avatar-group">
-                     <!-- <div class="avatar-group-item">
-                        <a href="javascript:void(0)" onclick="return TeamProfileModal(1)" class="text-white" title="View: Uzma Karjikar">
-                        <img src="http://localhost/decision168/assets/student_photos/1673688131_1.png" alt="" class="rounded-circle avatar-xs">
-                        </a>
-                     </div> -->
                      <div class="btn-group me-2 mb-2 mb-sm-0" >
                      <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="duplicateNoteGrid(this);" id="dupNote" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;" title="Duplicate" data-dupid="<?php echo $note->id?>"><i class="mdi mdi-content-duplicate"></i></a>
-                <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="Save" onclick="editNote(<?php echo $note->id.','.$note->access?>)" id="saveNote" data-updateid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;"><i class="mdi mdi-file-document-edit-outline"></i></i></a>
-                <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="New" onclick="editNewNote()" style="padding: 0 !important;font-size: 1.2rem; margin-left: 10px;"><i class="mdi mdi-content-save-edit-outline"></i></a>
-                <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="deleteNoteGrid(<?php echo $note->id?>)" id="deleteNote" data-deleteid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 8px; padding-top: 1px !important;" title="Delete"><i class="bx bx-trash"></i></a>
-            </div>
+                     <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="Save" onclick="editNote(<?php echo $note->id.','.$note->access?>)" id="saveNote" data-updateid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;"><i class="mdi mdi-file-document-edit-outline"></i></i></a>
+                     <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="New" onclick="editNewNote()" style="padding: 0 !important;font-size: 1.2rem; margin-left: 10px;"><i class="mdi mdi-content-save-edit-outline"></i></a>
+                     <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="deleteNoteGrid(<?php echo $note->id?>)" id="deleteNote" data-deleteid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 8px; padding-top: 1px !important;" title="Delete"><i class="bx bx-trash"></i></a>
+                  </div>
                   </div>
                   <p></p>
                </div>
+                  <?php
+               }
+               ?>
             </div>
          </div>
       </section>
@@ -1041,7 +1044,7 @@ function noteView(id,id2) {
             // notes.setContent(content);
          }
          if(id2 == '2'){
-            alert();
+            alert('opip');
             $('#createShow').show();
             $('#updateShow').hide();
             $('.save_fun').hide();
@@ -1102,51 +1105,51 @@ function noteView(id,id2) {
    //  tinymce.activeEditor.mode.set("readonly");
 }
 
-function noteView2(id) {
-   // debugger;
-   var notes = tinymce.get('notes');
+// function noteView2(id) {
+//    // debugger;
+//    var notes = tinymce.get('notes');
 
-    $.ajax({
-        url: base_url + 'front/get_note',
-        type: 'POST',
-        data: {
-            id: id
-        },
-        success: function(data) {
-         $(".note-list").removeClass("note-active");  
+//     $.ajax({
+//         url: base_url + 'front/get_note',
+//         type: 'POST',
+//         data: {
+//             id: id
+//         },
+//         success: function(data) {
+//          $(".note-list").removeClass("note-active");  
 
-            var data = JSON.parse(data);  
-            for (var j = 0; j <data.length; j++) {
-            var content = data[j].content;
-            var title = data[j].title;
-            var id = data[j].id;
-            $('#notes-data').html('<div class="card"><span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span><textarea class="form-control form-white notesupdate" placeholder="Enter Notes" name="meeting_agenda_up" id="notes_update'+id+'">'+content+'</textarea></div></div>');
-            // notes.setContent(content);
-         }
-            $('#createShow').show();
-            // $('#updateShow').show();
-            // $('#saveNote').attr("data-updateid",id);
-            // $('#deleteNote').attr("data-deleteid",id);
-            // $('#dupNote').attr("data-dupid",id);
-            // $('#shrNote').attr("data-shrid",id);
-            // $('#total_name').val(id);
+//             var data = JSON.parse(data);  
+//             for (var j = 0; j <data.length; j++) {
+//             var content = data[j].content;
+//             var title = data[j].title;
+//             var id = data[j].id;
+//             $('#notes-data').html('<div class="card"><span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span><textarea class="form-control form-white notesupdate" placeholder="Enter Notes" name="meeting_agenda_up" id="notes_update'+id+'">'+content+'</textarea></div></div>');
+//             // notes.setContent(content);
+//          }
+//             $('#createShow').show();
+//             // $('#updateShow').show();
+//             // $('#saveNote').attr("data-updateid",id);
+//             // $('#deleteNote').attr("data-deleteid",id);
+//             // $('#dupNote').attr("data-dupid",id);
+//             // $('#shrNote').attr("data-shrid",id);
+//             // $('#total_name').val(id);
 
-            // alert(id)
-            $(".note-line_"+id).addClass("note-active");
-         tinymce.remove('#notes_update'+id);
-         tinymce.init({
-      readonly: true, // Enable read-only mode
-      toolbar: false, // Hide the toolbar for read-only mode
-      menubar: false, // Hide the menubar for read-only mode
-      });
+//             // alert(id)
+//             $(".note-line_"+id).addClass("note-active");
+//          tinymce.remove('#notes_update'+id);
+//          tinymce.init({
+//       readonly: true, // Enable read-only mode
+//       toolbar: false, // Hide the toolbar for read-only mode
+//       menubar: false, // Hide the menubar for read-only mode
+//       });
 
-        }
-    });
+//         }
+//     });
 
-    // Call the function to remove the 'data' parameter on page load
-    removeDataParameterFromURL();
-   //  tinymce.activeEditor.mode.set("readonly");
-}
+//     // Call the function to remove the 'data' parameter on page load
+//     removeDataParameterFromURL();
+//    //  tinymce.activeEditor.mode.set("readonly");
+// }
 
 function myFunction() {
       var x = document.getElementById("notes");

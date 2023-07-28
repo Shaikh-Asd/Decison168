@@ -1530,6 +1530,21 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                                 }
                               }                               
                             }
+                            if($get_note_notifiy){
+                                foreach($get_note_notifiy as $noteNotify)
+                              {
+                                $check_nm = $this->Front_model->check_nm($noteNotify->portfolio_id);
+                                if($check_nm)
+                                  {
+                                    if($check_nm->sent_notify_clear == 'no')
+                                    {
+                                      $cnt35++;
+                                    }                                    
+                                  }  
+
+                              } 
+                            }
+                            
                         $notify_cnt = $cnt1 + $cnt2 + $cnt3 + $cnt4 + $cnt5 + $cnt6 + $cnt7 + $cnt8 + $cnt9 + $cnt10 + $cnt11 + $cnt12 + $cnt13 + $cnt14 + $cnt15 + $cnt16 + $cnt17 + $cnt18 + $cnt19 + $cnt20 + $cnt21 + $cnt22 + $cnt23 + $cnt24 + $cnt25 + $cnt26 + $cnt27 + $cnt28 + $cnt29 + $cnt30 + $cnt31  + $cnt32 + $cnt33 + $cnt34 + $cnt35;
                             if($notify_cnt != 0)
                             {
