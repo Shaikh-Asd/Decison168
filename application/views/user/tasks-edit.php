@@ -280,6 +280,21 @@ if($tdetail)
                                                     else
                                                     {
                                                     ?>
+                                                    <div class="col-md-5">
+                                                        <label class="col-form-label">Attached File(s)</label>
+                                                        <input class="form-control" name="tfile[]" id="tfile1" type="file" multiple="" />
+                                                            <span id="tfile1Err" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="mb-3 col-md-1">
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                    <div class="form-group mb-2">
+                                                                <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
+                                                                <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
+                                                                <div id="suggestionContainer"></div>        
+                                                                <span id="estimated_timeErr" class="text-danger"></span>
+                                                             </div>
+                                                             </div>
                                                     <div class="row mb-2">
                                                         <label class="col-form-label col-lg-12">Task Link(s) & Comment(s)</label>
                                                         <div class="col-lg-5">
@@ -335,18 +350,7 @@ if($tdetail)
                                                     ?>
                                                     </div>
                                                     <span id="link_validErr" class="text-danger"></span>
-                                                    <div class="col-md-4">
-                                                        <label class="col-form-label">Attached File(s)</label>
-                                                        <input class="form-control" name="tfile[]" id="tfile1" type="file" multiple="" />
-                                                            <span id="tfile1Err" class="text-danger"></span>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                    <div class="form-group mb-2">
-                                                                <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
-                                                                <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
-                                                                <span id="estimated_timeErr" class="text-danger"></span>
-                                                             </div>
-                                                             </div>
+                                                    
                                                              
                                                     </div>
                                                     <div class="dup_sub_task_fields mt-5">
@@ -501,10 +505,79 @@ else
         <script src="<?php echo base_url();?>assets/js/pages/task-create.init.js"></script>
         <!-- dropzone plugin -->
         <script src="<?php echo base_url();?>assets/libs/dropzone/min/dropzone.min.js"></script>
-
     <?php
 include('footer_links.php');
 ?>
+<!-- <script type="text/javascript">
+    // FOR EDIT TASK FORM ----------------------------------------
+  $('#edit_task_form').on('submit',function(event){   
+  debugger; 
+    event.preventDefault(); // Stop page from refreshing
+    $('#edit_task_button').hide();
+    $('#loader2').css('visibility','visible');
+   var formData = new FormData(this); 
+    $.ajax({
+         url:base_url+'front/edit_task',
+         type:"POST",
+         data:formData,
+         contentType:false,
+         processData:false,
+         cache:false,
+         success: function(data){
+          //debugger;
+          if (data.status == false)
+          {
+            //show errors
+            $('[id*=Err]').html('');
+            $.each(data.errors, function(key, val) {
+                var key =key.replace(/\[]/g, '');
+                key=key+'Err';
+                //console.log(key);    
+                $('#'+ key).html(val);
+            })
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');  
+          }
+          else if(data.status == 'file_uploadSizeErr')
+          {
+            var y_val = data.passYvalue;
+            $('#data_below_insert').val(y_val);
+            $('#tfile'+y_val+'Err').html('Oops Size is Large! It must be less than 2MB.');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');
+          }
+          else if(data.status == 'Error_Uploading')
+          {
+            var y_val = data.passYvalue;
+            $('#data_below_insert').val(y_val);
+            $('#tfile'+y_val+'Err').html('File Uploading Error! Please Try Again!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == 'link_valid')
+          {
+            $('#link_validErr').html('Please Enter Valid Link!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == 'stlink_valid')
+          {
+            $('#stlink_validErr').html('Please Enter Valid Link!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == true){
+            //debugger;
+            //var tid = data.tid;
+            //window.location = base_url+'tasks-overview/'+tid;
+            window.location = document.referrer;
+          }
+          //console.log(data);
+       }// success msg ends here
+
+     });
+  });
+    </script> -->
 <script type="text/javascript">
 $(document).ready(function(){
     //debugger;
@@ -522,7 +595,7 @@ $(document).ready(function(){
    $(add_dup_sub_task_fields).click(function(){
     //debugger;
            y++;
-              var memberHTML = '<div class="row" style="border-top: 2px solid #eff2f7;padding: 30px;"><div class="col-md-6"><div class="mb-2 form-group"><label class="col-form-label"for="stname">Sub Task <span class="text-danger">*</span></label> <input id="stname"name="stname'+y+'"class="form-control"placeholder="Enter Subtask Name..." required=""> <span class="text-danger"id="tnameErr"></span></div><div class="mb-2 form-group"><label class="col-form-label">Description</label> <textarea class="form-control"id="tdes"name="tdes'+y+'"placeholder="Enter Subtask Description..."rows="3"></textarea></div><div class="mb-2 form-group"><label class="col-form-label"for="tname">Priority <span class="text-danger">*</span></label> <select class="form-select"id="tpriority"name="tpriority'+y+'" required=""><option value=""selected>Set Subtask Priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select> <span class="text-danger"id="tpriorityErr"></span></div></div><div class="col-md-6"><div class="mb-2 form-group"><label class="col-form-label"for="tname">Due Date <span class="text-danger">*</span></label><div class="input-group"id="datepicker3"><input onmouseover="return st_duedate2('+y+')"id="tdue_date'+y+'"name="tdue_date'+y+'"class="form-control"placeholder="Subtask Due Date"data-date-autoclose="true"data-date-container="#datepicker3"data-date-format="yyyy-m-d"data-provide="datepicker" required=""></div><span class="text-danger"id="tdue_dateErr"></span></div><div class="mb-2 form-group"><label class="col-form-label">Note</label> <textarea class="form-control"id="tnote"name="tnote'+y+'"placeholder="Enter Subtask Note..."rows="3"></textarea></div><?php if(!empty($this->input->post('pid'))){$get_pdetail=$this->Front_model->getProjectById($this->input->post('pid'));$porttm=$this->Front_model->getAccepted_PortTM($get_pdetail->portfolio_id); ?><div class="mb-2 form-group"><label class="col-form-label"for="tname">Assignee <span class="text-danger">*</span></label> <select class="form-control team_member21'+y+'  change_team_member"name="team_member2'+y+'"style="line-height:1.5" required=""><?php if($porttm){foreach($porttm as $ptm){$m=$this->Front_model->selectLogin($ptm->sent_to); if($m){ if($m->reg_id!=$this->session->userdata('d168_id')){ ?><option value="<?php echo $m->reg_id; ?>"><span><?php echo $m->first_name." ".$m->last_name; ?></span></option><?php }if($m->reg_id==$this->session->userdata('d168_id')){ ?><option value="<?php echo $this->session->userdata('d168_id'); ?>"><span>Assign To Me</span></option><?php }}}} ?></select> <span class="text-danger"id="team_member21Err"></span></div><?php }else{ ?><div class="mb-2 form-group"><label class="col-form-label"for="tname">Assignee <span class="text-danger">*</span></label> <select class="form-control team_member21'+y+'  change_team_member"name="team_member2'+y+'"style="line-height:1.5" required=""><option value="<?php echo $this->session->userdata('d168_id'); ?>">Assign To Me</option></select> <span class="text-danger"id="team_member2Err"></span></div><?php } ?></div><div class="row mb-2"><label class="col-form-label col-lg-12">Subtask Link(s) & Comment(s)</label><div class="col-lg-5"><input id="stlink" name="stlink'+y+'[]" type="text" class="form-control" placeholder="Enter Subtask Link..."><span id="stlinkErr" class="text-danger"></span></div><div class="col-lg-5"><input id="stlink_comment" name="stlink_comment'+y+'[]" type="text" class="form-control" placeholder="Enter Subtask Link Comment..."><span id="stlink_commentErr" class="text-danger"></span></div><div class="col-lg-2"><button type="button" class="add_dup_stlink'+y+' btn btn-d btn-sm">Add Another link</button></div></div><div class="stlink_div'+y+'"></div><span id="stlink_validErr" class="text-danger"></span><div class="col-md-4"><label class="col-form-label">Attached File(s)</label><input class="form-control" id="tfile'+y+'"name="tfile'+y+'[]"multiple type="file"><span class="text-danger"id="tfile'+y+'Err"></span></div><div class="row justify-content-end float-end mb-4"><button class="mb-2 bg-d btn btn-sm col-md-2 m-2 remove_dup_sub_task_fields text-white"type="button">Remove Subtask</button></div></div>'; //New input field html
+              var memberHTML = '<div class="row" style="border-top: 2px solid #eff2f7;padding: 30px;"><div class="col-md-6"><div class="mb-2 form-group"><label class="col-form-label"for="stname">Sub Task <span class="text-danger">*</span></label> <input id="stname"name="stname'+y+'"class="form-control"placeholder="Enter Subtask Name..." required=""> <span class="text-danger"id="tnameErr"></span></div><div class="mb-2 form-group"><label class="col-form-label">Description</label> <textarea class="form-control"id="tdes"name="tdes'+y+'"placeholder="Enter Subtask Description..."rows="3"></textarea></div><div class="mb-2 form-group"><label class="col-form-label"for="tname">Priority <span class="text-danger">*</span></label> <select class="form-select"id="tpriority"name="tpriority'+y+'" required=""><option value=""selected>Set Subtask Priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select> <span class="text-danger"id="tpriorityErr"></span></div></div><div class="col-md-6"><div class="mb-2 form-group"><label class="col-form-label"for="tname">Due Date <span class="text-danger">*</span></label><div class="input-group"id="datepicker3"><input onmouseover="return st_duedate2('+y+')"id="tdue_date'+y+'"name="tdue_date'+y+'"class="form-control"placeholder="Subtask Due Date"data-date-autoclose="true"data-date-container="#datepicker3"data-date-format="yyyy-m-d"data-provide="datepicker" required=""></div><span class="text-danger"id="tdue_dateErr"></span></div><div class="mb-2 form-group"><label class="col-form-label">Note</label> <textarea class="form-control"id="tnote"name="tnote'+y+'"placeholder="Enter Subtask Note..."rows="3"></textarea></div><?php if(!empty($this->input->post('pid'))){$get_pdetail=$this->Front_model->getProjectById($this->input->post('pid'));$porttm=$this->Front_model->getAccepted_PortTM($get_pdetail->portfolio_id); ?><div class="mb-2 form-group"><label class="col-form-label"for="tname">Assignee <span class="text-danger">*</span></label> <select class="form-control team_member21'+y+'  change_team_member"name="team_member2'+y+'"style="line-height:1.5" required=""><?php if($porttm){foreach($porttm as $ptm){$m=$this->Front_model->selectLogin($ptm->sent_to); if($m){ if($m->reg_id!=$this->session->userdata('d168_id')){ ?><option value="<?php echo $m->reg_id; ?>"><span><?php echo $m->first_name." ".$m->last_name; ?></span></option><?php }if($m->reg_id==$this->session->userdata('d168_id')){ ?><option value="<?php echo $this->session->userdata('d168_id'); ?>"><span>Assign To Me</span></option><?php }}}} ?></select> <span class="text-danger"id="team_member21Err"></span></div><?php }else{ ?><div class="mb-2 form-group"><label class="col-form-label"for="tname">Assignee <span class="text-danger">*</span></label> <select class="form-control team_member21'+y+'  change_team_member"name="team_member2'+y+'"style="line-height:1.5" required=""><option value="<?php echo $this->session->userdata('d168_id'); ?>">Assign To Me</option></select> <span class="text-danger"id="team_member2Err"></span></div><?php } ?></div><div class="col-md-5"><label class="col-form-label">Attached File(s)</label><input class="form-control" id="tfile'+y+'"name="tfile'+y+'[]"multiple type="file"><span class="text-danger"id="tfile'+y+'Err"></span></div><div class="mb-3 col-md-1"></div><div class="mb-3 col-md-6"><div class="form-group mb-2"><label for="estimated_stime" class="col-form-label">Estimated Time <span class="text-danger">*</span></label><input oninput = "gentime(event);" data-id="'+y+'" id="estimated_stime'+y+'" name="estimated_stime'+y+'" type="text" class="form-control" placeholder="Enter time in hour format" required="" value=""><div class="suggestionSContainer" id="suggestionSContainer'+y+'"></div><span id="estimated_timeErr" class="text-danger"></span></div></div><div class="row mb-2"><label class="col-form-label col-lg-12">Subtask Link(s) & Comment(s)</label><div class="col-lg-5"><input id="stlink" name="stlink'+y+'[]" type="text" class="form-control" placeholder="Enter Subtask Link..."><span id="stlinkErr" class="text-danger"></span></div><div class="col-lg-5"><input id="stlink_comment" name="stlink_comment'+y+'[]" type="text" class="form-control" placeholder="Enter Subtask Link Comment..."><span id="stlink_commentErr" class="text-danger"></span></div><div class="col-lg-2"><button type="button" class="add_dup_stlink'+y+' btn btn-d btn-sm">Add Another link</button></div></div><div class="stlink_div'+y+'"></div><span id="stlink_validErr" class="text-danger"></span><div class="row justify-content-end float-end mb-4"><button class="mb-2 bg-d btn btn-sm col-md-2 m-2 remove_dup_sub_task_fields text-white"type="button">Remove Subtask</button></div></div>'; //New input field html
            $(dup_sub_task_fields).append(memberHTML); //Add field html
            $('#getYvalue').val(y);
 
@@ -549,6 +622,30 @@ $(document).ready(function(){
                    $(this).parent('div').parent('div').remove(); //Remove field html
                    a--; //Decrement field counter
                });
+
+//                var timeInputEdit = document.getElementById('estimated_stime');
+// var suggestionContainerEdit = document.getElementById('suggestionSContainer');
+
+// timeInputEdit.addEventListener('input', () => {
+//   var enteredTimeEdit = timeInputEdit.value;
+//   var suggestionsEdit = generateTimeSuggestions(enteredTimeEdit);
+
+//   suggestionContainerEdit.innerHTML = '';
+
+//   suggestionsEdit.forEach((suggestionEdit) => {
+//     var suggestionOptionEdit = document.createElement('div');
+//     suggestionOptionEdit.textContent = suggestionEdit;
+//     suggestionOptionEdit.addEventListener('click', () => {
+//       timeInputEdit.value = suggestionEdit;
+//       suggestionContainerEdit.innerHTML = '';
+//       timeInputEdit.focus();
+
+
+
+//     });
+//     suggestionContainerEdit.appendChild(suggestionOptionEdit);
+//   });
+// });
    });
    
    // $(dup_sub_task_fields).on('click', '.add_dup_sub_task_fields2', function(e){

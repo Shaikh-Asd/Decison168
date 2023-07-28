@@ -203,6 +203,23 @@ if($tdetail)
                                                     else
                                                     {
                                                     ?>
+                                                    <div class="mb-3 col-md-5">
+                                                        <label class="col-form-label">Attached File(s)</label>
+                                                        <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
+                                                            <span id="tfileErr" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="mb-3 col-md-1">
+
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                    <div class="form-group mb-2">
+                                                        <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
+                                                        <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
+                                                        <div id="suggestionContainer"></div>    
+
+                                                        <span id="estimated_timeErr" class="text-danger"></span>
+                                                    </div>
+                                                    </div>
                                                     <div class="row mb-2">
                                                         <label class="col-form-label col-lg-12">Task Link(s) & Comment(s)</label>
                                                         <div class="col-lg-5">
@@ -258,18 +275,7 @@ if($tdetail)
                                                     ?>
                                                     </div>
                                                     <span id="link_validErr" class="text-danger"></span>
-                                                    <div class="mb-3 col-md-4">
-                                                        <label class="col-form-label">Attached File(s)</label>
-                                                        <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
-                                                            <span id="tfileErr" class="text-danger"></span>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                    <div class="form-group mb-2">
-                                                                <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
-                                                                <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
-                                                                <span id="estimated_timeErr" class="text-danger"></span>
-                                                             </div>
-                                                             </div>
+                                                    
                                                     <div class="justify-content-end">
                                                             <button type="submit" id="edit_task_button" class="btn btn-d btn-sm">Save Changes</button>
                                                             <img id="loader2" style="visibility: hidden;" src="<?php echo base_url()?>assets/images/loading.gif">       
@@ -385,7 +391,78 @@ else
 <script src="<?php echo base_url();?>assets/libs/select2/js/select2.min.js"></script>
 <!-- bootstrap datepicker -->
 <script src="<?php echo base_url();?>assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="<?php echo base_url('assets/js/front.js');?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/front.js');?>"></script> -->
+<script type="text/javascript">
+
+    // FOR EDIT TASK FORM MODAL ----------------------------------------
+  $('#edit_task_formModal').on('submit',function(event){   
+  //debugger; 
+    event.preventDefault(); // Stop page from refreshing
+    $('#edit_task_button').hide();
+    $('#loader2').css('visibility','visible');
+   var formData = new FormData(this); 
+    $.ajax({
+         url:base_url+'front/edit_task',
+         type:"POST",
+         data:formData,
+         contentType:false,
+         processData:false,
+         cache:false,
+         success: function(data){
+          //debugger;
+          if (data.status == false)
+          {
+            //show errors
+            $('[id*=Err]').html('');
+            $.each(data.errors, function(key, val) {
+                var key =key.replace(/\[]/g, '');
+                key=key+'Err';
+                //console.log(key);    
+                $('#'+ key).html(val);
+            })
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');  
+          }
+          else if(data.status == 'file_uploadSizeErr')
+          {
+            var y_val = data.passYvalue;
+            $('#data_below_insert').val(y_val);
+            $('#tfile'+y_val+'Err').html('Oops Size is Large! It must be less than 2MB.');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');
+          }
+          else if(data.status == 'Error_Uploading')
+          {
+            var y_val = data.passYvalue;
+            $('#data_below_insert').val(y_val);
+            $('#tfile'+y_val+'Err').html('File Uploading Error! Please Try Again!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == 'link_valid')
+          {
+            $('#link_validErr').html('Please Enter Valid Link!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == 'stlink_valid')
+          {
+            $('#stlink_validErr').html('Please Enter Valid Link!');
+            $('#edit_task_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == true){
+            //debugger;
+            //var tid = data.tid;
+            //window.location = base_url+'tasks-overview/'+tid;
+            window.location.reload();
+          }
+          //console.log(data);
+       }// success msg ends here
+
+     });
+  });
+    </script>
 <script type="text/javascript">
 $(document).ready(function(){
 //debugger;

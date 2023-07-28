@@ -183,6 +183,7 @@ function showTestDate(){
 
 $('#book_call_form').on('submit',function(event){
     event.preventDefault(); // Stop page from refreshing
+    $('#book_timeErr').html();
     var formData = new FormData(this); 
     $.ajax({
          url:'front/insert_call_booking',
@@ -202,6 +203,9 @@ $('#book_call_form').on('submit',function(event){
                 //console.log(key);    
                 $('#'+ key).html(val);
             })
+          }
+          else if(data.status == 'less_time'){
+            $('#book_timeErr').html('Select Time greater than current time');
           }
           else if(data.status == 'already_exists'){
             $('#book_timeErr').html('Sold Out');

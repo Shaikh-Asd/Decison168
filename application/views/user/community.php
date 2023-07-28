@@ -1,5 +1,7 @@
 <?php
-$page = 'community'; 
+$page = 'community';
+if(empty($this->session->userdata('d168_user_cor_id')))
+{ 
 ?>
 <!doctype html>
 <html lang="en">    
@@ -1063,3 +1065,6 @@ $page = 'community';
         </script>
     </body>
 </html>
+<?php  
+}
+?>

@@ -338,6 +338,29 @@ else
 </div>
 <!-- end page title-->
 <?php
+
+function timeStringToMinutes($timeString) {
+    list($hours, $minutes) = sscanf($timeString, '%dh%dm');
+    return $hours * 60 + $minutes;
+  }
+  
+  function minutesToTimeString($totalMinutes) {
+    $hours = floor($totalMinutes / 60);
+    $minutes = $totalMinutes % 60;
+    return sprintf('%dh %02dm', $hours, $minutes);
+  }
+
+  function calculateTotalTime($Goal_tasks) {
+    $totalMinutes = 0;
+    
+    foreach ($Goal_tasks as $time) {
+        $estimatedTime = $time->estimated_time;
+        $totalMinutes += timeStringToMinutes($estimatedTime);
+    }
+
+    return minutesToTimeString($totalMinutes);
+}
+
 if(($this->session->flashdata('message')) && ($this->session->flashdata('message') != ""))
 {
 ?>
@@ -373,6 +396,8 @@ if(($this->session->flashdata('al_message')) && ($this->session->flashdata('al_m
                                                     <th scope="col">Progress</th>
                                                     <th scope="col">Start Date</th>
                                                     <th scope="col">End Date</th>
+                                                    <th scope="col">Time Estimate</th>
+                                                    <th scope="col">Time Tracked</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -482,6 +507,9 @@ if(($this->session->flashdata('al_message')) && ($this->session->flashdata('al_m
                                                     <?php
                                                     $Goal_tasks = $this->Front_model->Goal_tasks($p->gid);
                                                     $Goal_subtasks = $this->Front_model->Goal_subtasks($p->gid);
+                                                    
+                                                   
+
                                                     if($Goal_tasks || $Goal_subtasks)
                                                     {
                                                         $progress_done = $this->Front_model->Goalprogress_done($p->gid);
@@ -516,6 +544,44 @@ if(($this->session->flashdata('al_message')) && ($this->session->flashdata('al_m
                                                             </td>
                                                             <td>
                                                                 <span class="badge badge-soft-dark"><?php echo $p->gend_date;?></span>
+                                                            </td>
+                                                            <?php
+                                        $est = 0; // Variable to store the sum of estimated times
+                                        $trc = 0;
+                                        $total_seconds = 0;
+                                        $totalTime = "00:00:00";
+                                       
+                                        // Assuming $Goal_tasks is an array of objects with 'estimated_time' property
+                                       
+
+                                        $est = calculateTotalTime($Goal_tasks);
+                                        foreach ($Goal_tasks as $item) {
+                                            $tracked_time = $item->tracked_time;
+                                            $trackedTimeInSeconds = strtotime($tracked_time) - strtotime('00:00:00');
+                                            $trc += $trackedTimeInSeconds;
+                                            $character = "'";
+                                             if (strpos($tracked_time, $character) !== false) {
+                                                $tracked_time = str_replace($character, "", $tracked_time);
+                                            } else {
+                                            }
+                                            // Create DateTime objects for the current time and the total time
+                                            $datetime1 = DateTime::createFromFormat('H:i:s', $tracked_time);
+                                            $datetime2 = DateTime::createFromFormat('H:i:s', $totalTime);
+
+                                            // Add the current time to the total time
+                                            $datetime2->add(new DateInterval('PT' . $datetime1->format('H') . 'H' . $datetime1->format('i') . 'M' . $datetime1->format('s') . 'S'));
+
+                                            // Update the total time
+                                            $totalTime = $datetime2->format('H:i:s');
+                                        }
+                                        ?>
+                                                            <td>
+                                                            <?php echo $est;?>
+
+                                                            </td>
+                                                            <td>
+                                                            <?php echo $totalTime;?>
+
                                                             </td>
                                                             </tr>
                                                             <?php

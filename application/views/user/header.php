@@ -997,6 +997,9 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                         $approve_expert_clear = $this->Front_model->getApproveExpertNotify_clear();//Expert call rate notification
                         $file_preview_permission_notify_clear = $this->Front_model->file_preview_permission_notify_clear();//preview permission notification
                         $file_preview_permission_resp_notify_clear = $this->Front_model->file_preview_permission_resp_notify_clear();//preview permission response  notification
+                        $get_note_notifiy = $this->Front_model->get_note_notifiy();//note member request notification 
+                        
+                        // print_r($get_note_notifiy);
                         $check_meeting_invite = "";
                         if($getMeetingInvites_inApp_notify_clear)
                         {
@@ -1010,7 +1013,7 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                             }
                         }
                         $notify_cnt = 0;
-                        if($task_notification_clear || $OverdueTasks_clear || $OverdueSubtasks_clear || $pending_plist_clear || $check_task_review_sent_clear || $check_task_review_deny_clear || $check_task_review_approve_clear || $get_all_cproject || $get_all_aproject || $get_all_pproject || $get_all_rproject || $subtask_notification_clear || $check_subtask_review_sent_clear || $check_subtask_review_deny_clear || $check_subtask_review_approve_clear || $check_task_arrive_review_clear || $check_subtask_arrive_review_clear || $check_portfolio_accepted_notify_clear || $check_project_accepted_notify_clear || $check_project_invite_accepted_notify_clear || $check_project_request_member_notify_clear || $check_meeting_invite || $pending_glist_clear || $approve_expert_clear || $file_preview_permission_notify_clear || $file_preview_permission_resp_notify_clear)
+                        if($get_note_notifiy || $task_notification_clear || $OverdueTasks_clear || $OverdueSubtasks_clear || $pending_plist_clear || $check_task_review_sent_clear || $check_task_review_deny_clear || $check_task_review_approve_clear || $get_all_cproject || $get_all_aproject || $get_all_pproject || $get_all_rproject || $subtask_notification_clear || $check_subtask_review_sent_clear || $check_subtask_review_deny_clear || $check_subtask_review_approve_clear || $check_task_arrive_review_clear || $check_subtask_arrive_review_clear || $check_portfolio_accepted_notify_clear || $check_project_accepted_notify_clear || $check_project_invite_accepted_notify_clear || $check_project_request_member_notify_clear || $check_meeting_invite || $pending_glist_clear || $approve_expert_clear || $file_preview_permission_notify_clear || $file_preview_permission_resp_notify_clear)
                         {
                             $cnt1 = 0;
                             $cnt2 = 0;
@@ -1046,6 +1049,7 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                             $cnt32 = 0;
                             $cnt33 = 0;
                             $cnt34 = 0;
+                            $cnt35 = 0;
                             if($task_notification_clear)
                             {
                                 foreach($task_notification_clear as $tn)
@@ -1526,7 +1530,7 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                                 }
                               }                               
                             }
-                        $notify_cnt = $cnt1 + $cnt2 + $cnt3 + $cnt4 + $cnt5 + $cnt6 + $cnt7 + $cnt8 + $cnt9 + $cnt10 + $cnt11 + $cnt12 + $cnt13 + $cnt14 + $cnt15 + $cnt16 + $cnt17 + $cnt18 + $cnt19 + $cnt20 + $cnt21 + $cnt22 + $cnt23 + $cnt24 + $cnt25 + $cnt26 + $cnt27 + $cnt28 + $cnt29 + $cnt30 + $cnt31  + $cnt32 + $cnt33 + $cnt34;
+                        $notify_cnt = $cnt1 + $cnt2 + $cnt3 + $cnt4 + $cnt5 + $cnt6 + $cnt7 + $cnt8 + $cnt9 + $cnt10 + $cnt11 + $cnt12 + $cnt13 + $cnt14 + $cnt15 + $cnt16 + $cnt17 + $cnt18 + $cnt19 + $cnt20 + $cnt21 + $cnt22 + $cnt23 + $cnt24 + $cnt25 + $cnt26 + $cnt27 + $cnt28 + $cnt29 + $cnt30 + $cnt31  + $cnt32 + $cnt33 + $cnt34 + $cnt35;
                             if($notify_cnt != 0)
                             {
                     ?>
@@ -1571,6 +1575,54 @@ if(empty($this->session->userdata('d168_user_cor_id')))
                     </div>
                     <div data-simplebar style="max-height: 450px;">
                         <div id="new_notify_top_div">
+                <?php
+                        if($get_note_notifiy)
+        {
+            foreach($get_note_notifiy as $nm)
+            {
+        ?>
+        <a href="javascript: void(0);" class="new_notify_top" data-topdate="<?php echo $nm->sent_date;?>" id="notclr<?php echo $nm->nid;?>">
+            <div class="text-reset notification-item border-top">
+                <div class="media">
+                    <div class="avatar-xs me-3">
+                        <span class="avatar-title btn-d text-white rounded-circle font-size-16">
+                            N
+                        </span>
+                    </div>
+                    <div class="media-body me-3" onclick="return noteRedirectView(<?php echo $nm->nid.','.$nm->access?>)">
+                        <h6 class="mt-0 mb-1" key="t-your-order">
+                            <!-- <span class="badge badge-soft-dark"><?php echo $nm->nid;?></span> -->
+                            <span class="badge badge-soft-dark">Notes</span>
+                        </h6>
+                        <div class="font-size-12 text-muted">
+                            <p class="mb-1" key="t-grammer"><?php 
+                             $outputcnt = substr($nm->title, 0, 15) . "...";
+                             echo $outputcnt;
+                            ?>
+                            </p>
+                            <p class="mb-1">
+                            <?php 
+                            $outputtitle = substr($nm->content, 0, 15) . "...";
+                            echo $outputtitle;
+                            ?>
+                            </p>
+                            <p class="mb-0"><i class="mdi mdi-calendar-outline"></i> <span key="t-min-ago"><?php echo date('Y-m-d',strtotime($nm->sent_date));?></span></p>
+                        </div>
+                    </div>
+                    <div class="float-end" style="padding-right: 10px;">
+                        <button type="button" class="btn btn-light position-relative p-0 avatar-xs rounded-circle" onclick="return NoteNotificationClearYes(<?php echo $nm->nid;?>);" title="Remove" style="height: 1.6rem;width: 1.6rem;">
+                            <span class="avatar-title bg-transparent text-reset">
+                                <i class="bx bx-x" style="font-size: 1.2rem;"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <?php
+            }
+        }
+        ?>
                         <?php
                         if($task_notification_clear)
                         {

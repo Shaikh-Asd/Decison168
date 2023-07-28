@@ -21,7 +21,9 @@ $page = 'tasks-create';
 include('header_links.php');
 ?>
     </head>
-
+<style>
+    
+</style>
     <body data-sidebar="dark">
         <!-- Begin page -->
         <div id="layout-wrapper">
@@ -433,6 +435,22 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
                                                     }
                                                     ?>
                                                   </div>
+                                                  <div class="mb-3 col-md-5">
+                                                        <label class="col-form-label">Attached File(s)</label>
+                                                        <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
+                                                            <span id="tfileErr" class="text-danger"></span>
+                                                        
+                                                    </div>
+                                                  <div class="mb-3 col-md-1">
+
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                        <label class="col-form-label">Estimate Time<span class="text-danger">*</span> (For example: XhXm)</label>
+                                                        <input class="form-control" name="estimated_time" id="estimated_time" type="text" placeholder="Enter time in hour format" required />
+                                                            <div id="suggestionContainer"></div>    
+                                                        <span id="estimated_timeErr" class="text-danger"></span>
+                                                        
+                                                    </div>
                                                     <div class="row mb-2">
                                                         <label class="col-form-label col-lg-12">Task Link(s) & Comment(s)</label>
                                                         <div class="col-lg-5">
@@ -450,18 +468,7 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
                                                     <div class="tlink_div">
                                                     </div>
                                                     <span id="link_validErr" class="text-danger"></span>
-                                                  <div class="mb-3 col-md-5">
-                                                        <label class="col-form-label">Attached File(s)</label>
-                                                        <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
-                                                            <span id="tfileErr" class="text-danger"></span>
-                                                        
-                                                    </div>
-                                                    <div class="mb-3 col-md-5">
-                                                        <label class="col-form-label">Estimate Time<span class="text-danger">*</span></label>
-                                                        <input class="form-control" name="estimated_time" id="estimated_time" type="text" placeholder="Enter time in hour format" required />
-                                                            <span id="estimated_timeErr" class="text-danger"></span>
-                                                        
-                                                    </div>
+                                                  
                                                     <div class="justify-content-end">
                                                         <span id="limit_taskErr" class="text-danger"></span>
                                                         <button type="submit" id="create_task_button" class="btn btn-d btn-sm">Create Task</button>
@@ -583,7 +590,6 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
         <script src="<?php echo base_url();?>assets/js/pages/task-create.init.js"></script>
         <!-- dropzone plugin -->
         <script src="<?php echo base_url();?>assets/libs/dropzone/min/dropzone.min.js"></script>
-
     <?php
 include('footer_links.php');
 ?>

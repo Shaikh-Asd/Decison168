@@ -857,6 +857,7 @@ if($data_task->flag == '1'){
                                                                         } 
                                                                         ?>
                                                                         <a href="javascript: void(0);" class="nameLink h6" onclick="return SubtaskOverviewModal('<?php echo $subtask->stid;?>')"><?php echo $subtask->stcode." : ".$subtask->stname;?></a>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -871,10 +872,111 @@ if($data_task->flag == '1'){
                                                 <div class="row m-4">
                                                                 <div class="col-md-6">
                                                                     <div>
+                                 
                                                                         <?php
                                                                             if(!empty($tdetail->tproject_assign))
                                                                                 {
-                                                                        ?>
+                                                                       
+                                                                                $est = 0; // Variable to store the sum of estimated times
+                                                                                $trc = 0;
+                                                                                $total_seconds = 0;
+                                                                                $totalTime = "00:00:00";
+
+                                                                                function timeStringToMinutes($timeString) {
+                                                                                    list($hours, $minutes) = sscanf($timeString, '%dh%dm');
+                                                                                    return $hours * 60 + $minutes;
+                                                                                  }
+                                                                                  
+                                                                                  function minutesToTimeString($totalMinutes) {
+                                                                                    $hours = floor($totalMinutes / 60);
+                                                                                    $minutes = $totalMinutes % 60;
+                                                                                    return sprintf('%dh %02dm', $hours, $minutes);
+                                                                                  }
+                                                                                // Assuming $Goal_tasks is an array of objects with 'estimated_time' property
+                                                                                function calculateTotalTime($Goal_tasks) {
+                                                                                    $totalMinutes = 0;
+                                                                                    
+                                                                                    foreach ($Goal_tasks as $time) {
+                                                                                        $estimatedTime = $time->estimated_stime;
+                                                                                        $totalMinutes += timeStringToMinutes($estimatedTime);
+                                                                                    }
+                                                                                
+                                                                                    return minutesToTimeString($totalMinutes);
+                                                                                }
+                                                                                  
+                                                                                $totalStime = calculateTotalTime($Check_Task_Subtasks);
+
+                                                                                foreach ($Check_Task_Subtasks as $subtask) {
+
+                                                                                    $tracked_time = $subtask->tracked_stime;
+                                                                                    $character = "'";
+                                                                                                                                
+                                                                                    if (strpos($tracked_time, $character) !== false) {
+                                                                                        $tracked_time = str_replace($character, " ", $tracked_time);
+                                                                                    } else {
+                                                                                    }
+                                                                                    if (empty($tracked_time)) {
+                                                                                        $tracked_stime = '00:00:00';
+                                                                                    }
+                                                                                    else{
+                                                                                        $tracked_stime = $tracked_time;
+                                                                                    }
+                                                                                    // Create DateTime objects for the current time and the total time
+                                                                                    $datetime1 = DateTime::createFromFormat('H:i:s', $tracked_stime);
+                                                                                    $datetime2 = DateTime::createFromFormat('H:i:s', $totalTime);
+                                                                                    // Add the current time to the total time
+                                                                                    $datetime2->add(new DateInterval('PT' . $datetime1->format('H') . 'H' . $datetime1->format('i') . 'M' . $datetime1->format('s') . 'S'));
+                                                                                    // Update the total time
+                                                                                    $totalTime = $datetime2->format('H:i:s');
+                                                                                }
+                                                                                $time1 = $totalTime;
+                                                                                $time2 = $tdetail->tracked_time;
+
+                                                                                // Convert time values to seconds
+                                                                                $time1_parts = explode(':', $time1);
+                                                                                $time2_parts = explode(':', $time2);
+
+                                                                                $time1_seconds = $time1_parts[0] * 3600 + $time1_parts[1] * 60 + $time1_parts[2];
+                                                                                $time2_seconds = $time2_parts[0] * 3600 + $time2_parts[1] * 60 + $time2_parts[2];
+
+                                                                                // Add the seconds
+                                                                                $total_seconds = $time1_seconds + $time2_seconds;
+                                                                                // Convert total seconds back to time format
+                                                                                $totalTimes = gmdate('H:i:s', $total_seconds);
+                                                                                $TimEstimated = $totalStime ;
+
+                                                                                function timeToMinutes($time) {
+                                                                                    $time_parts = explode('h', $time);
+                                                                                    $hours = intval($time_parts[0]);
+                                                                                    $minutes = 0;
+                                                                                    
+                                                                                    if (count($time_parts) > 1) {
+                                                                                        $minutes_parts = explode('m', $time_parts[1]);
+                                                                                        $minutes = intval($minutes_parts[0]);
+                                                                                    }
+                                                                                    
+                                                                                    return $hours * 60 + $minutes;
+                                                                                }
+                                                                                
+                                                                                // Given time values
+                                                                                $time1 = $totalStime;
+                                                                                $time2 = $tdetail->estimated_time;
+                                                                                
+                                                                                // Convert times to minutes
+                                                                                $time1_minutes = timeToMinutes($time1);
+                                                                                $time2_minutes = timeToMinutes($time2);
+                                                                                
+                                                                                // Add the minutes
+                                                                                $total_minutes = $time1_minutes + $time2_minutes;
+                                                                                
+                                                                                // Convert back to hours and minutes
+                                                                                $total_hours = floor($total_minutes / 60);
+                                                                                $remaining_minutes = $total_minutes % 60;
+                                                                                
+                                                                                // Format the result
+                                                                                $result = $total_hours . "h" .' '. $remaining_minutes . "m";
+                                                                            ?>
+                                                                        <p class="text-muted"><i class="bx bx-time-five font-size-16 align-middle me-1 text-d"></i> Time Estimated : <?php echo $result; ?></p>
                                                                         <p class="text-muted"><i class="bx bx-briefcase-alt-2 font-size-16 align-middle me-1 text-d"></i> Project :
                                                                         <?php
                                                                                     $check_page = $this->Front_model->ProjectDetail($tdetail->tproject_assign);
@@ -917,6 +1019,7 @@ if($data_task->flag == '1'){
                                                                                 {
                                                                                     $pro = $this->Front_model->getProjectById($tdetail->tproject_assign);
                                                                         ?>
+                                                                        <p class="text-muted"><i class="bx bx-timer font-size-16 align-middle me-1 text-d"></i> Time Tracked : <?php  echo $totalTimes; ?></p>
                                                                         <p class="text-muted"><i class="bx bxs-user-detail font-size-16 align-middle me-1 text-d"></i> Portfolio : <?php
                                                                         if($pro){
                                                                                 if($pro->portfolio_id != 0)
@@ -1811,6 +1914,7 @@ else{
                                                                         } 
                                                                         ?>
                                                                         <a href="javascript: void(0);" class="nameLink h6" onclick="return SubtaskOverviewModal('<?php echo $subtask->stid;?>')"><?php echo $subtask->stcode." : ".$subtask->stname;?></a>
+                                                                        
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -1828,7 +1932,83 @@ else{
                                                                         <?php
                                                                             if(!empty($tdetail->tproject_assign))
                                                                                 {
-                                                                        ?>
+                                                                                $est = 0; // Variable to store the sum of estimated times
+                                                                                $trc = 0;
+                                                                                $total_seconds = 0;
+                                                                                $totalTime = "00:00:00";
+                                                                                $totalStime = calculateTotalTime($Check_Task_Subtasks);
+
+                                                                                foreach ($Check_Task_Subtasks as $subtask) {
+
+                                                                                    $tracked_time = $subtask->tracked_stime;
+                                                                                    $character = "'";
+                                                                                                                                
+                                                                                    if (strpos($tracked_time, $character) !== false) {
+                                                                                        $tracked_time = str_replace($character, " ", $tracked_time);
+                                                                                    } else {
+                                                                                    }
+                                                                                    if (empty($tracked_time)) {
+                                                                                        $tracked_stime = '00:00:00';
+                                                                                    }
+                                                                                    else{
+                                                                                        $tracked_stime = $tracked_time;
+                                                                                    }
+                                                                                    // Create DateTime objects for the current time and the total time
+                                                                                    $datetime1 = DateTime::createFromFormat('H:i:s', $tracked_stime);
+                                                                                    $datetime2 = DateTime::createFromFormat('H:i:s', $totalTime);
+                                                                                    // Add the current time to the total time
+                                                                                    $datetime2->add(new DateInterval('PT' . $datetime1->format('H') . 'H' . $datetime1->format('i') . 'M' . $datetime1->format('s') . 'S'));
+                                                                                    // Update the total time
+                                                                                    $totalTime = $datetime2->format('H:i:s');
+                                                                                }
+                                                                                $time1 = $totalTime;
+                                                                                $time2 = $tdetail->tracked_time;
+
+                                                                                // Convert time values to seconds
+                                                                                $time1_parts = explode(':', $time1);
+                                                                                $time2_parts = explode(':', $time2);
+
+                                                                                $time1_seconds = $time1_parts[0] * 3600 + $time1_parts[1] * 60 + $time1_parts[2];
+                                                                                $time2_seconds = $time2_parts[0] * 3600 + $time2_parts[1] * 60 + $time2_parts[2];
+
+                                                                                // Add the seconds
+                                                                                $total_seconds = $time1_seconds + $time2_seconds;
+                                                                                // Convert total seconds back to time format
+                                                                                $totalTimes = gmdate('H:i:s', $total_seconds);
+                                                                                $TimEstimated = $totalStime ;
+
+                                                                                function timeToMinutes($time) {
+                                                                                    $time_parts = explode('h', $time);
+                                                                                    $hours = intval($time_parts[0]);
+                                                                                    $minutes = 0;
+                                                                                    
+                                                                                    if (count($time_parts) > 1) {
+                                                                                        $minutes_parts = explode('m', $time_parts[1]);
+                                                                                        $minutes = intval($minutes_parts[0]);
+                                                                                    }
+                                                                                    
+                                                                                    return $hours * 60 + $minutes;
+                                                                                }
+                                                                                
+                                                                                // Given time values
+                                                                                $time1 = $totalStime;
+                                                                                $time2 = $tdetail->estimated_time;
+                                                                                
+                                                                                // Convert times to minutes
+                                                                                $time1_minutes = timeToMinutes($time1);
+                                                                                $time2_minutes = timeToMinutes($time2);
+                                                                                
+                                                                                // Add the minutes
+                                                                                $total_minutes = $time1_minutes + $time2_minutes;
+                                                                                
+                                                                                // Convert back to hours and minutes
+                                                                                $total_hours = floor($total_minutes / 60);
+                                                                                $remaining_minutes = $total_minutes % 60;
+                                                                                
+                                                                                // Format the result
+                                                                                $result = $total_hours . "h" .' '. $remaining_minutes . "m";
+                                                                            ?>
+                                                                        <p class="text-muted"><i class="bx bx-time-five font-size-16 align-middle me-1 text-d"></i> Time Estimated : <?php echo $result; ?></p>
                                                                         <p class="text-muted"><i class="bx bx-briefcase-alt-2 font-size-16 align-middle me-1 text-d"></i> Project :
                                                                         <?php
                                                                                     $check_page = $this->Front_model->file_itProjectDetail($tdetail->tproject_assign);
@@ -1863,6 +2043,7 @@ else{
                                                                                 {
                                                                                     $pro = $this->Front_model->file_itgetProjectById($tdetail->tproject_assign);
                                                                         ?>
+                                                                        <p class="text-muted"><i class="bx bx-timer font-size-16 align-middle me-1 text-d"></i> Time Tracked : <?php  echo $totalTimes; ?></p>
                                                                         <p class="text-muted"><i class="bx bxs-user-detail font-size-16 align-middle me-1 text-d"></i> Portfolio : <?php
                                                                         if($pro){
                                                                                 if($pro->portfolio_id != 0)
@@ -2748,6 +2929,18 @@ else{
                                                                         } 
                                                                         ?>
                                                                         <a href="javascript: void(0);" class="nameLink h6" onclick="return SubtaskOverviewModal('<?php echo $subtask->stid;?>')"><?php echo $subtask->stcode." : ".$subtask->stname;?></a>
+                                                                        <?php
+                                                                        if (empty($subtask->tracked_stime)) {
+                                                                            $tracked_stime = '00:00:00';
+                                                                        }
+                                                                        else{
+                                                                            $tracked_stime = $subtask->tracked_stime;
+                                                                        }
+                                                                        ?>
+                                                                        <strong style="margin-left: 15px;">Time Estimated:</strong>
+                                                                        <span class="ms-1"><?php echo $subtask->estimated_stime;?></span>
+                                                                        <strong style="margin-left: 15px;">Time Tracked:</strong>
+                                                                        <span class="ms-1"><?php echo $tracked_stime;?></span>
                                                                     </div>
                                                                 </div>
                                                             </li>
@@ -2765,7 +2958,108 @@ else{
                                                                         <?php
                                                                             if(!empty($tdetail->tproject_assign))
                                                                                 {
-                                                                        ?>
+                                                                                    $est = 0; // Variable to store the sum of estimated times
+                                                                                $trc = 0;
+                                                                                $total_seconds = 0;
+                                                                                $totalTime = "00:00:00";
+                                                                                // print_r($Check_Task_Subtasks);
+                                                                                $totalStime = 0;
+                                                                                
+                                                                                function timeStringToMinutes($timeString) {
+                                                                                    list($hours, $minutes) = sscanf($timeString, '%dh%dm');
+                                                                                    return $hours * 60 + $minutes;
+                                                                                  }
+                                                                                  
+                                                                                  function minutesToTimeString($totalMinutes) {
+                                                                                    $hours = floor($totalMinutes / 60);
+                                                                                    $minutes = $totalMinutes % 60;
+                                                                                    return sprintf('%dh %02dm', $hours, $minutes);
+                                                                                  }
+                                                                                // Assuming $Goal_tasks is an array of objects with 'estimated_time' property
+                                                                                function calculateTotalTime($Goal_tasks) {
+                                                                                    $totalMinutes = 0;
+                                                                                    
+                                                                                    foreach ($Goal_tasks as $time) {
+                                                                                        $estimatedTime = $time->estimated_stime;
+                                                                                        $totalMinutes += timeStringToMinutes($estimatedTime);
+                                                                                    }
+                                                                                
+                                                                                    return minutesToTimeString($totalMinutes);
+                                                                                }
+                                                                                  
+                                                                                  $totalStime = calculateTotalTime($Check_Task_Subtasks);
+
+                                                                                foreach ($Check_Task_Subtasks as $subtask) {
+
+                                                                                    $tracked_time = $subtask->tracked_stime;
+                                                                                    $character = "'";
+                                                                                                                                
+                                                                                    if (strpos($tracked_time, $character) !== false) {
+                                                                                        $tracked_time = str_replace($character, " ", $tracked_time);
+                                                                                    } else {
+                                                                                    }
+                                                                                    if (empty($tracked_time)) {
+                                                                                        $tracked_stime = '00:00:00';
+                                                                                    }
+                                                                                    else{
+                                                                                        $tracked_stime = $tracked_time;
+                                                                                    }
+                                                                                    // Create DateTime objects for the current time and the total time
+                                                                                    $datetime1 = DateTime::createFromFormat('H:i:s', $tracked_stime);
+                                                                                    $datetime2 = DateTime::createFromFormat('H:i:s', $totalTime);
+                                                                                    // Add the current time to the total time
+                                                                                    $datetime2->add(new DateInterval('PT' . $datetime1->format('H') . 'H' . $datetime1->format('i') . 'M' . $datetime1->format('s') . 'S'));
+                                                                                    // Update the total time
+                                                                                    $totalTime = $datetime2->format('H:i:s');
+                                                                                }
+                                                                                $time1 = $totalTime;
+                                                                                $time2 = $tdetail->tracked_time;
+
+                                                                                // Convert time values to seconds
+                                                                                $time1_parts = explode(':', $time1);
+                                                                                $time2_parts = explode(':', $time2);
+
+                                                                                $time1_seconds = $time1_parts[0] * 3600 + $time1_parts[1] * 60 + $time1_parts[2];
+                                                                                $time2_seconds = $time2_parts[0] * 3600 + $time2_parts[1] * 60 + $time2_parts[2];
+
+                                                                                // Add the seconds
+                                                                                $total_seconds = $time1_seconds + $time2_seconds;
+                                                                                // Convert total seconds back to time format
+                                                                                $totalTimes = gmdate('H:i:s', $total_seconds);
+                                                                                $TimEstimated = $totalStime ;
+
+                                                                                function timeToMinutes($time) {
+                                                                                    $time_parts = explode('h', $time);
+                                                                                    $hours = intval($time_parts[0]);
+                                                                                    $minutes = 0;
+                                                                                    
+                                                                                    if (count($time_parts) > 1) {
+                                                                                        $minutes_parts = explode('m', $time_parts[1]);
+                                                                                        $minutes = intval($minutes_parts[0]);
+                                                                                    }
+                                                                                    
+                                                                                    return $hours * 60 + $minutes;
+                                                                                }
+                                                                                
+                                                                                // Given time values
+                                                                                $time1 = $totalStime;
+                                                                                $time2 = $tdetail->estimated_time;
+                                                                                
+                                                                                // Convert times to minutes
+                                                                                $time1_minutes = timeToMinutes($time1);
+                                                                                $time2_minutes = timeToMinutes($time2);
+                                                                                
+                                                                                // Add the minutes
+                                                                                $total_minutes = $time1_minutes + $time2_minutes;
+                                                                                
+                                                                                // Convert back to hours and minutes
+                                                                                $total_hours = floor($total_minutes / 60);
+                                                                                $remaining_minutes = $total_minutes % 60;
+                                                                                
+                                                                                // Format the result
+                                                                                $result = $total_hours . "h" .' '. $remaining_minutes . "m";
+                                                                            ?>
+                                                                        <p class="text-muted"><i class="bx bx-time-five font-size-16 align-middle me-1 text-d"></i> Time Estimated : <?php echo $result; ?></p>
                                                                         <p class="text-muted"><i class="bx bx-briefcase-alt-2 font-size-16 align-middle me-1 text-d"></i> Project :
                                                                         <?php
                                                                                     $check_page = $this->Front_model->ProjectDetail($tdetail->tproject_assign);
@@ -2808,6 +3102,7 @@ else{
                                                                                 {
                                                                                     $pro = $this->Front_model->getProjectById($tdetail->tproject_assign);
                                                                         ?>
+                                                                        <p class="text-muted"><i class="bx bx-timer font-size-16 align-middle me-1 text-d"></i> Time Tracked : <?php  echo $totalTimes; ?></p>
                                                                         <p class="text-muted"><i class="bx bxs-user-detail font-size-16 align-middle me-1 text-d"></i> Portfolio : <?php
                                                                         if($pro){
                                                                                 if($pro->portfolio_id != 0)

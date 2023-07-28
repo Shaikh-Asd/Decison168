@@ -2094,7 +2094,7 @@ event.preventDefault();
 
   // FOR EDIT TASK FORM MODAL ----------------------------------------
   $('#edit_task_formModal').on('submit',function(event){   
-  //debugger; 
+  // debugger; 
     event.preventDefault(); // Stop page from refreshing
     $('#edit_task_button').hide();
     $('#loader2').css('visibility','visible');
@@ -9180,7 +9180,7 @@ function Active_PortfolioMember(id)
 }
 
 //task edit modal
-  function TaskEditModal(id){           
+  function TaskEditModal(id){ 
            var id = id;
            // AJAX request
            $.ajax({
@@ -9195,6 +9195,28 @@ function Active_PortfolioMember(id)
               $('#TaskEditModal').modal('show'); 
             }
           });
+          setTimeout(function() {
+
+          var timeInput_new = document.getElementById('estimated_time');
+          var suggestionContainer_new = document.getElementById('suggestionContainer');
+            if (timeInput_new) {
+              timeInput_new.addEventListener('input', () => {
+                var enteredTime_new = timeInput_new.value;
+                var suggestions_new = generateTimeSuggestions(enteredTime_new);
+                suggestionContainer_new.innerHTML = '';
+                suggestions_new.forEach((suggestion_new) => {
+                  var suggestionOption_new = document.createElement('div');
+                  suggestionOption_new.textContent = suggestion_new;
+                  suggestionOption_new.addEventListener('click', () => {
+                    timeInput_new.value = suggestion_new;
+                    suggestionContainer_new.innerHTML = '';
+                    timeInput_new.focus();
+                  });
+                  suggestionContainer_new.appendChild(suggestionOption_new);
+                });
+              });
+            }  
+          }, 2000);
          }
 
 //profile modal
@@ -9489,6 +9511,7 @@ function get_subtask_pid_task_edit(y)//sub task create
                 method: 'POST',
                 data: {pid:tproject_assign},  
                 success: function(data) {
+                  console.log(z);
                   $( '.team_member21'+z ).select2({
                     /* Sort data using localeCompare- task assignee alphabetical order  */
                     sorter: data => data.sort((a, b) => a.text.localeCompare(b.text)),
@@ -9577,6 +9600,31 @@ function SubtaskEditModal(id){
               $('#SubtaskEditModal').modal('show'); 
             }
           });
+
+
+          setTimeout(function() {
+
+            var timeInput_snew = document.getElementById('estimated_stime');
+            var suggestionContainer_snew = document.getElementById('suggestionSContainer');
+              if (timeInput_snew) {
+                timeInput_snew.addEventListener('input', () => {
+                  var enteredTime_snew = timeInput_snew.value;
+                  var suggestions_snew = generateTimeSuggestions(enteredTime_snew);
+                  suggestionContainer_snew.innerHTML = '';
+                  suggestions_snew.forEach((suggestion_snew) => {
+                    var suggestionOption_new = document.createElement('div');
+                    suggestionOption_new.textContent = suggestion_snew;
+                    suggestionOption_new.addEventListener('click', () => {
+                      timeInput_snew.value = suggestion_snew;
+                      suggestionContainer_snew.innerHTML = '';
+                      timeInput_snew.focus();
+                    });
+                    suggestionContainer_snew.appendChild(suggestionOption_new);
+                  });
+                });
+              }  
+            }, 2000);
+
 }
 
 //subtask overview modal
@@ -17724,3 +17772,44 @@ function FilePreviewPermissionRespClearYes(id){
        }
 
 // request to preview files if view only selected in role
+
+function NoteNotificationClearYes(id){ 
+  //debugger;          
+  var id = id;
+  var n_cnt = $('#get_notify_cnt_val').val();
+  // AJAX request
+  $.ajax({
+    url:  base_url+'front/NoteNotificationClearYes',
+    type: 'post',
+    data: {id: id},
+    success: function(data){
+    // debugger;
+    $('#notclr'+id).remove(); 
+    var new_notecnt = n_cnt - 1;
+    $('#get_notify_cnt_val').val(new_notecnt);
+    $('#notify_cnt_val').html(new_notecnt);
+    $("#fix_notification_box").addClass("show");
+    }
+  });
+}
+
+function noteRedirectView(id,aid) {
+  var myID = id; // Replace "example" with your actual value
+  var aID = aid; // Replace "example" with your actual value
+//   const myArray = [myID];
+
+// // Using array destructuring to fetch the values into two different variables
+// const [variable1, variable2] = myArray;
+
+// console.log(variable1); // Output: 5
+// console.log(variable2); // Output: 2
+  console.log(myID);
+  console.log(aID);
+
+  // var url5 = `notes-list?data=${encodeURIComponent(myID,aID)}`;
+  var url5 = `notes-list?data=${encodeURIComponent(`myID=${myID}&aID=${aID}`)}`;
+
+  console.log(url5);
+
+    window.location.href = url5; 
+}

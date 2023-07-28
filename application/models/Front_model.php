@@ -2753,8 +2753,8 @@ class Front_model extends CI_Model {
 
 	function p_tasks($id)
 	{
-		$this->db->order_by('tid', 'DESC');
-    	$this->db->group_by('tassignee');
+		// $this->db->order_by('tid', 'DESC');
+    	// $this->db->group_by('tassignee');
     	$this->db->where('reg_acc_status !=','deactivated');
     	$this->db->where('trash !=', 'yes');
 		$this->db->where('task_archive !=', 'yes');
@@ -14899,64 +14899,190 @@ function checkUserReportTemplate($id)
 
 	// request to preview files if view only selected in role
 	
-  // Notes work start
+   // Notes work start
 
-  function insert_note($data)
-  {
-	  if($this->db->insert('notes',$data))
-	  {
-		  return TRUE;
-	  }
-	  else
-	  {
-		  return FALSE;
-	  }
-  }
+   function insert_note($data)
+   {
+	   if($this->db->insert('notes',$data))
+	   {
+		   return TRUE;
+	   }
+	   else
+	   {
+		   return FALSE;
+	   }
+   }
+ 
+   function getNotesMem($id)
+   {
 
-
-  function getNotes($id)
-  {
-	  $this->db->order_by('updated_at', 'DESC');
-	  $this->db->where('port_id ',$id);
-	  $this->db->where('user_id ',$this->session->userdata('d168_id'));
-	  $query = $this->db->get('notes');
-	  return $query->result();
-  }
-  function getNotesById($id)
-  {
-	  $this->db->where('id ',$id);
-	  $query = $this->db->get('notes');
-	  return $query->result();
-  }
-
-  function update_note($data,$id)
-  {
-	  $this->db->where('id',$id);
-	  if($this->db->update('notes',$data))
-	  {
-		  return TRUE;
-	  }
-	  else
-	  {
-		  return FALSE;
-	  }
-  }
+		$this->db->order_by('p.port_id', 'DESC');	
+		$this->db->group_start();	
+		$this->db->group_start();	
+		$this->db->where('pm.nmember', $this->session->userdata('d168_id'));	
+		$this->db->where('pm.reg_acc_status !=','deactivated');	
+		$this->db->where('pm.status', 'send');	
+		$this->db->group_end();	
+		$this->db->or_where('p.user_id', $this->session->userdata('d168_id'));	
+		$this->db->group_end();	
+		$this->db->where('p.port_id', $id);	
+		$this->db->where('p.ntrash !=', 'yes');	
+		$this->db->where('p.note_archive !=', 'yes');	
+		$this->db->where('p.note_file_it !=', 'yes');	
+        $this->db->select('*, p.id as pid, pm.nid as pm_pid');	
+        $this->db->from('notes as p');	
+        $this->db->join('notes_members as pm','pm.nid = p.id', 'left');	
+        $query = $this->db->get();
+		// echo $this->db->last_query();	
+        return $query->result();    
+   }
 
 
-  function deleteNote($id)
-  {
-	  $this->db->where('id',$id);
-	  if($this->db->delete('notes'))
-	  {
-		  return TRUE;
-	  }
-	  else
-	  {
-		  return FALSE;
-	  }
-  }
+   function getNotes($id)
+   {
+	   $this->db->order_by('updated_at', 'DESC');
+	   $this->db->where('port_id ',$id);
+	   $this->db->where('user_id ',$this->session->userdata('d168_id'));
+	   $query = $this->db->get('notes');
+	   return $query->result();
+   }
+   function getNotesById($id)
+   {
+	   $this->db->where('id ',$id);
+	   $query = $this->db->get('notes');
+	   return $query->result();
+   }
 
-// Notes work end
+   function getNotesById2($id)
+	{	
+		$this->db->where('id',$id);
+		$query = $this->db->get('notes');
+		return $query->row();
+	}
+
+ 
+   function update_note($data,$id)
+   {
+	   $this->db->where('id',$id);
+	   if($this->db->update('notes',$data))
+	   {
+		   return TRUE;
+	   }
+	   else
+	   {
+		   return FALSE;
+	   }
+   }
+ 
+ 
+   function deleteNote($id)
+   {
+	   $this->db->where('id',$id);
+	   if($this->db->delete('notes'))
+	   {
+		   return TRUE;
+	   }
+	   else
+	   {
+		   return FALSE;
+	   }
+   }
+   function deleteMultipleNote($ids)
+   {
+	//    $idList = explode(',', $ids); // Convert the comma-separated string back to an array
+	   
+	   $this->db->where_in('id', $ids);
+	   $this->db->delete('notes');
+	   
+	   if ($this->db->affected_rows() > 0)
+	   {
+		   return TRUE;
+	   }
+	   else
+	   {
+		   return FALSE;
+	   }
+   }
+
+   function check_NoteTeam($suggest_nid,$nid)
+	{
+		$this->db->where('reg_acc_status !=','deactivated');
+		$this->db->where('nmember', $suggest_nid);
+		$this->db->where('nid', $nid);
+		$this->db->where('ntrash !=', 'yes');
+		$this->db->where('note_archive !=', 'yes');
+		$this->db->where('note_file_it !=', 'yes');
+		$query = $this->db->get('notes_members');
+		return $query->num_rows();
+	}
+
+	function insert_notemember($data_note)
+	{
+		if($this->db->insert('notes_members',$data_note))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	function check_nm($port_id)
+    {
+    	$this->db->where('reg_acc_status !=','deactivated');
+    	$this->db->where('portfolio_id',$port_id);
+    	$this->db->where('nid','2');
+    	// $this->db->where('nmember',$this->session->userdata('d168_id'));
+
+		// $this->db->group_start();	
+		// $this->db->where('ncreated_by',$this->session->userdata('d168_id'));
+		// $this->db->or_where('nmember',$this->session->userdata('d168_id'));
+		// $this->db->group_end();
+
+		// $this->db->group_start();
+		// $this->db->where('nmember',$this->session->userdata('d168_id'));
+
+		$this->db->where('ncreated_by',$this->session->userdata('d168_id'));
+		// $this->db->group_end();
+
+    	// $this->db->where('pid',$pid);
+    	$query = $this->db->get('notes_members');
+    	return $query->row();
+    }
+
+	function get_note_notifiy()
+	{
+		$this->db->where('nm.nmember',$this->session->userdata('d168_id'));
+		$this->db->where('nm.status', 'send');
+		$this->db->select('*');
+        $this->db->from('notes_members as nm');
+        $this->db->join('notes as e','e.id = nm.nid');
+        $query = $this->db->get();
+        return $query->result();
+	}
+   
+	function getNoteMemberById($nid)
+	{
+		$this->db->where('nid',$nid);
+		$query = $this->db->get('notes_members');
+		return $query->row();
+	}
+	function updateNoteMem($data,$id)
+	{
+		$this->db->where('nid',$id);
+		$this->db->where('nmember',$this->session->userdata('d168_id'));
+		if($this->db->update('notes_members',$data))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+  // Notes work end
 
 }
 /* End of file Front_model.php */

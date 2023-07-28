@@ -5,8 +5,52 @@
 <script src="<?php echo base_url();?>assets/js/app.js"></script>
         
 <script src="<?php echo base_url('assets/js/front.js');?>"></script>
+<script src="<?php echo base_url();?>assets/js/function.js"></script>
+<script src="<?php echo base_url();?>assets/libs/tinymce_notes/js/tinymce/tinymce.min.js"></script>
+
 <script src="<?php echo base_url();?>assets/tour/js/bs5-intro-tour.js"></script>
     <style> 
+    #suggestionContainer{
+        position: absolute;
+        z-index: 999;
+        height: 50px;
+        overflow: auto;
+        width: 95%;
+        
+    }
+        #suggestionContainer div{
+        background-color: #fff;
+        border: 2px solid #E5E4E2;
+        padding: 12px;
+    }
+
+    #suggestionSContainer{
+        position: absolute;
+        z-index: 999;
+        height: 50px;
+        overflow: auto;
+        width: 95%;
+    }
+        #suggestionSContainer div{
+        background-color: #fff;
+        border: 2px solid #E5E4E2;
+        padding: 12px;
+    }
+
+    .suggestionSContainer{
+        position: absolute;
+        z-index: 999;
+        height: 50px;
+        overflow: auto;
+        width: 95%;
+    }
+        .suggestionSContainer div{
+        background-color: #fff;
+        border: 2px solid #E5E4E2;
+        padding: 12px;
+    }
+
+
             .float-button { 
         text-decoration: none;  
         position: fixed;    
@@ -417,5 +461,5 @@ $.ajax({
     }   
   });   
 }   
-g = setInterval(timer_alert_status, 1000);
+// g = setInterval(timer_alert_status, 1000);
 </script>

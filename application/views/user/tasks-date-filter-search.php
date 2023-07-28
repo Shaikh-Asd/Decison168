@@ -554,27 +554,28 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
         <div class="card" style="margin-bottom: 0px;">
             <div class="card-body" style="padding: 8px 0px 0px 0px;">
             <div class="row mb-2">
-                <div class="col-lg-1">
+                <div class="col-lg">
                     <div class="text-center" style="font-weight: 900;">Code</div>
                 </div>
-                <div class="col-lg-1">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Tracked Time</div>
                 </div>
-                <div class="col-lg-1">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Task</div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Assignee</div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Priority</div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Status</div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg">
                     <div style="font-weight: 900;">Due Date</div>
                 </div>
+                
             </div>
             </div>
         </div>
@@ -609,7 +610,7 @@ if($AssignedTasklist)
         <div class="card" style="margin-bottom: 0px;">
             <div class="card-body" style="padding: 8px 0px 0px 0px;">
                 <div class="row mb-2">
-                    <div class="col-lg-1"></div>
+                    <div class="col-lg"></div>
                     <?php
                   if($check_suggested)
                     {
@@ -870,7 +871,7 @@ else
             <?php } echo $atl->tcode;?>
         </div>
         <div class="col-lg">
-        <span class="timerBtn_<?php echo $atl->tid;?>"><i class="bx bx-play-circle timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i></span>
+        <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
             if($atl->flag == '1'){
@@ -1223,7 +1224,7 @@ if($privilege_only_view == 'no')
                             </div>
                             <div class="col-lg">
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
-                                <i class="bx bx-play-circle timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i>
+                                <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
                                 <span class="countersubtask_<?php echo $l_subtask->stid;?> counter_stask" data-id="<?php echo $l_subtask->stid;?>">
                                 <?php
@@ -1841,7 +1842,7 @@ else
              echo $atl->tcode;?>
         </div>
         <div class="col-lg">
-        <span class="timerBtn_<?php echo $atl->tid;?>"><i class="bx bx-play-circle timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i></span>
+        <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
             if($atl->flag == '1'){
@@ -2231,7 +2232,7 @@ if($privilege_only_view == 'no')
                             </div>
                             <div class="col-lg">
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
-                                <i class="bx bx-play-circle timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i>
+                                <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
                                 <span class="countersubtask_<?php echo $l_subtask->stid;?> counter_stask" data-id="<?php echo $l_subtask->stid;?>">
                                 <?php

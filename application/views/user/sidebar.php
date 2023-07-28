@@ -155,8 +155,10 @@
                     </li>
                     <?php
                 }
-                ?>
-
+                
+                if(empty($this->session->userdata('d168_user_cor_id')))
+                {
+                ?> 
                 <li <?php if($page == 'community') { echo 'class="mm-active"';} ?> id="tour_community">
                     <a href="<?php echo base_url('community');?>" class="waves-effect">
                         <i class="fas fa-people-arrows"></i>
@@ -189,6 +191,7 @@
                     </a>
                 </li>
                     <?php
+                }
                 }
                 ?>
 

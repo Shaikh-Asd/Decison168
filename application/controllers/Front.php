@@ -1973,6 +1973,7 @@ public function __construct()
         $this->load->view('user/projects-overview-modal',$data);                                       
         echo '</div>';  
       }else{
+        
         $data['pdetail'] = $this->Front_model->ProjectDetail($id);
         $data['t_members'] = $this->Front_model->Edit_Team_Members($id);
         $data['p_tasks'] = $this->Front_model->p_tasks($id);
@@ -16873,6 +16874,7 @@ if($check_portfolio_name)
                                         'gid' => $gid,
                                         'sid' => $sid,
                                         'dept_id' => $this->input->post('dept'),
+                                        'estimated_time' => $this->input->post('estimated_time'),
                                         'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                     );
                                     $data = $this->security->xss_clean($data); // xss filter
@@ -17799,6 +17801,7 @@ if($check_portfolio_name)
                                       'gid' => $gid,
                                       'sid' => $sid,
                                       'dept_id' => $this->input->post('dept'),
+                                      'estimated_time' => $this->input->post('estimated_time'),
                                       'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                   );
                                   $data = $this->security->xss_clean($data); // xss filter
@@ -18259,6 +18262,7 @@ if($check_portfolio_name)
                                       'gid' => $gid,
                                       'sid' => $sid,
                                       'dept_id' => $this->input->post('dept'),
+                                      'estimated_time' => $this->input->post('estimated_time'),
                                       'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                   );
                                   $data = $this->security->xss_clean($data); // xss filter
@@ -18762,6 +18766,7 @@ if($check_portfolio_name)
                                         'gid' => $gid,
                                         'sid' => $sid,
                                         'dept_id' => $this->input->post('dept'),
+                                        'estimated_time' => $this->input->post('estimated_time'),
                                         'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                     );
                                     $data = $this->security->xss_clean($data); // xss filter
@@ -19222,6 +19227,7 @@ if($check_portfolio_name)
                                         'gid' => $gid,
                                         'sid' => $sid,
                                         'dept_id' => $this->input->post('dept'),
+                                        'estimated_time' => $this->input->post('estimated_time'),
                                         'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                     );
                                     $data = $this->security->xss_clean($data); // xss filter
@@ -22788,7 +22794,11 @@ if($check_portfolio_name)
             }
           }
         }
-
+        $estimated_time = $this->input->post('estimated_time');
+        $timer_alert_status = $getTasksDetail->timer_alert_status;
+        if($getTasksDetail->estimated_time !== $estimated_time ){
+          $timer_alert_status = '0';
+        }
 
                   $data = array(
                                     'tname' => $this->input->post('tname'),
@@ -22813,6 +22823,8 @@ if($check_portfolio_name)
                                     'gid' => $gid,
                                     'sid' => $sid,
                                     'dept_id' => $this->input->post('dept'),
+                                    'estimated_time' => $estimated_time,
+                                    'timer_alert_status' => $timer_alert_status,
                                 );
                                 $data = $this->security->xss_clean($data); // xss filter
                                 $this->Front_model->edit_NewTask($data,$tid);
@@ -22869,7 +22881,9 @@ if($check_portfolio_name)
                         $stnote = $_POST['tnote'.$i]; 
                         $stdue_date = $_POST['tdue_date'.$i]; 
                         $stpriority = $_POST['tpriority'.$i]; 
-                        $stassignee = $_POST['team_member2'.$i];
+                        $stpriority = $_POST['tpriority'.$i];
+                        $stassignee = $_POST['team_member2'.$i]; 
+                        $estimated_stime = $_POST['estimated_stime'.$i];
                             $stud = $this->Front_model->getStudentById($stassignee);
                         //stlink array
                         $stlink_array="";
@@ -23222,7 +23236,8 @@ if($check_portfolio_name)
             }
           }
         }
-
+        
+        
                           $data2 = array(
                                       'tid' => $tid,
                                       'stproject_assign' => $this->input->post('tproject_assign'),
@@ -23248,6 +23263,7 @@ if($check_portfolio_name)
                                       'gid' => $gid,
                                       'sid' => $sid,
                                       'dept_id' => $this->input->post('dept'),
+                                      'estimated_stime' => $estimated_stime,
                                       'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                   );
                         $data2 = $this->security->xss_clean($data2); // xss filter
@@ -24255,7 +24271,7 @@ public function subtasks_overview()
     if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
     {
     $this->form_validation->set_rules('tid','Task Name','trim|required');
-    $this->form_validation->set_rules('estimated_stime','Estimated Time','trim|required');
+    // $this->form_validation->set_rules('estimated_stime','Estimated Time','trim|required');
       if ($this->form_validation->run() == FALSE)
       {
           //$errors = array();
@@ -24315,7 +24331,8 @@ public function subtasks_overview()
                     $stdue_date = $_POST['tdue_date'.$i]; 
                     $stpriority = $_POST['tpriority'.$i]; 
                     $stassignee = $_POST['team_member2'.$i];
-                        $stud = $this->Front_model->getStudentById($stassignee);
+                    $estimated_stime = $_POST['estimated_stime'.$i];
+                    $stud = $this->Front_model->getStudentById($stassignee);
                     //stlink array
                     $stlink_array="";
                     $stlink_comment_array="";
@@ -24678,7 +24695,12 @@ if($check_portfolio_name)
             }
           }
         }
-        
+        // $getSTasksDetail = $this->Front_model->getSubtasksDetail($stid);
+        // $estimated_stime = $this->input->post('estimated_stime');
+        // $timer_salert_status = $getSTasksDetail->timer_salert_status;
+        // if($getSTasksDetail->estimated_stime !== $estimated_stime ){
+        //   $timer_salert_status = '0';
+        // }
                       $data = array(
                                       'tid' => $tid,
                                       'stproject_assign' => $tproject_assign,
@@ -24704,6 +24726,7 @@ if($check_portfolio_name)
                                       'gid' => $gid,
                                       'sid' => $sid,
                                       'dept_id' => $dept_id,
+                                      'estimated_stime' => $estimated_stime,
                                       'corporate_id' => $this->session->userdata('d168_user_cor_id')
                                   );
                     $data = $this->security->xss_clean($data); // xss filter
@@ -25330,6 +25353,14 @@ if($check_portfolio_name)
             }
           }
         }
+
+        $getSTasksDetail = $this->Front_model->getSubtasksDetail($stid);
+        $estimated_stime = $this->input->post('estimated_stime');
+        $timer_salert_status = $getSTasksDetail->timer_salert_status;
+        if($getSTasksDetail->estimated_stime !== $estimated_stime ){
+          $timer_salert_status = '0';
+        }
+
                   $data = array(
                                     'stname' => $this->input->post('stname'),
                                     'stdes' => $this->input->post('tdes'),
@@ -25349,6 +25380,8 @@ if($check_portfolio_name)
                                     'stnotify' => $stnotify,
                                     'stnotify_clear' => $stnotify_clear,
                                     'stnotify_date' => date('Y-m-d H:i:s'),
+                                    'estimated_stime' => $this->input->post('estimated_stime'),
+                                    'timer_salert_status' => $timer_salert_status,
                                 );
                                 $data = $this->security->xss_clean($data); // xss filter
                                 $this->Front_model->edit_NewSubtask($data,$stid);
@@ -69616,7 +69649,25 @@ public function downloadUserReport()
             $minute = $digits[1]; // "00"
             $second = $digits[2]; // "02"
 
-          if($reminder_estimateTask ==  $hour ){
+            
+            // Function to convert hh:mm format to total minutes
+            function convertToMinutes($time) {
+              list($hours, $minutes) = explode(" ", $time);
+              return (int)$hours * 60 + (int)$minutes;
+            }
+
+            // Convert the tracked time to total minutes
+            $trackedTimeMinutes = convertToMinutes($counter);
+
+            // Convert the estimated time to total minutes
+            $estimatedTimeMinutes = convertToMinutes($reminder_estimateTask);
+
+            // Check if both times are the same or not
+            if ($estimatedTimeMinutes === $trackedTimeMinutes) {
+          //     echo "Both times are the same.";
+          //   } 
+
+          // if($reminder_estimateTask ==  $counter ){
 
             if($timer_alert_status == '0' ){
 
@@ -69652,6 +69703,9 @@ public function downloadUserReport()
             exit(json_encode($response));
 
             } 
+          }
+          else {
+            echo "Both times are not the same.";
           }
           }
 
@@ -69709,7 +69763,22 @@ public function downloadUserReport()
                 $subsecond = $subdigits[2]; // "02"
                 
                 if($timer_salert_status == '0' ){
-                if($reminder_estimateSubtask ==  $subhour ){
+
+
+                  function convertToMinutes($time) {
+                    list($hours, $minutes) = explode(" ", $time);
+                    return (int)$hours * 60 + (int)$minutes;
+                }
+                
+                // Convert the tracked time to total minutes
+                $StrackedTimeMinutes = convertToMinutes($subcounter);
+                
+                // Convert the estimated time to total minutes
+                $SestimatedTimeMinutes = convertToMinutes($reminder_estimateSubtask);
+                
+                // Check if both times are the same or not
+                if ($SestimatedTimeMinutes === $StrackedTimeMinutes) {
+                
                 $data = array(
                   'timer_salert_status' => '1'                  
                 );
@@ -69742,6 +69811,9 @@ public function downloadUserReport()
                 exit(json_encode($response));
 
                 }
+                else {
+                  echo "Both times are not the same.";
+              }
               }
               // else{
               //   // echo 'No data found';
@@ -72382,7 +72454,9 @@ public function downloadUserReport()
        {
          $c_id = $_COOKIE["d168_selectedportfolio"];
          // $data['getp'] = $this->Front_model->getPortfolio3($c_id);
+         $data['pdetail'] = $this->Front_model->ProjectDetail($c_id);
          $data['get_notes'] = $this->Front_model->getNotes($c_id);
+         $data['getNotesMem'] = $this->Front_model->getNotesMem($c_id);
          $this->load->view('user/notes_list',$data);
        }
      }
@@ -72448,6 +72522,66 @@ public function downloadUserReport()
    }
  }
  
+ public function store_duplicate_note()
+   {
+ 
+    //  $this->form_validation->set_rules('text','Notes','trim|required');
+     
+    //  if ($this->form_validation->run() == FALSE)
+    //  {
+    //      //$errors = array();
+    //      $errors = $this->form_validation->error_array();
+    //      // Loop through $_POST and get the keys
+    //      foreach ($errors as $key => $value)
+    //      {
+    //        // Add the error message for this field
+    //        $errors[$key] = form_error($key);
+    //      }
+       
+    //      $response['errors'] = array_filter($errors); // Some might be empty
+    //      $response['status'] = FALSE;
+    //      // You can use the Output class here too
+    //      header('Content-type: application/json');
+    //      exit(json_encode($response));
+    //  }
+    //  else
+    //  {
+ 
+     $text = $this->input->post('text');
+     $text2 = $this->input->post('title');
+ 
+     $words = [];
+ preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
+ 
+ if (isset($matches[0])) {
+   $words = $matches[0]; // Get the matched words
+ }
+ 
+ $title = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
+ 
+ $title = $text2.'[copy]';
+     $data = array(
+       'port_id' => $_COOKIE["d168_selectedportfolio"],
+       'user_id' => $this->session->userdata('d168_id'),
+       'title' => $title,
+       'content' => $text,
+     );
+     $data = $this->security->xss_clean($data); // xss filter
+     $this->Front_model->insert_note($data);
+     $lastInsertedId = $this->db->insert_id();
+
+ 
+         $response['status'] = TRUE;
+         $response['id'] = $lastInsertedId;
+         // $response['title'] = $title;
+         // You can use the Output class here too
+         header('Content-type: application/json');
+         //echo json_encode($response);
+         exit(json_encode($response));
+ 
+  //  }
+ }
+
  public function updateNote()
  {
  
@@ -72491,7 +72625,7 @@ public function downloadUserReport()
    $id = $this->input->post('id');
    $data = array(
      'port_id' => $_COOKIE["d168_selectedportfolio"],
-     'user_id' => $this->session->userdata('d168_id'),
+    //  'user_id' => $this->session->userdata('d168_id'),
      'title' => $title,
      'content' => $text,
    );
@@ -72507,8 +72641,34 @@ public function downloadUserReport()
  }
  }
  
+ public function get_note_mem()
+   {
+
+    if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+     {
+ 
+       if(isset($_COOKIE["d168_selectedportfolio"]))
+       {
+         $id = $this->input->post('id');
+         $cid = $_COOKIE["d168_selectedportfolio"];
+        //  $data = $this->Front_model->getNotesById($id); 
+         $data = $this->Front_model->check_nm($cid,$id);
+        // print_r($data);
+         echo json_encode($data);
+ 
+         
+       }
+     }
+     else
+     {
+       redirect(base_url('login'));
+     }
+
+   }
  public function get_note()
    {
+    // echo 'dasd';
+    // die();
      if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
      {
  
@@ -72530,11 +72690,139 @@ public function downloadUserReport()
    public function delete_note()
    {
          $id = $this->input->post('id');
+         
          $data = $this->Front_model->deleteNote($id);        
          echo json_encode($data); 
    }
+   public function delete_multiple_note()
+   {
+        $idList = $this->input->post('id[]');
+        $data = $this->Front_model->deleteMultipleNote($idList);        
+         echo json_encode($data); 
+   }
  
- 
+   
+   public function note_AddTeamMember()
+{
+    if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+    {
+          $nid = $this->input->post('total_note');
+          $notesdetail = $this->Front_model->getNotesById2($nid);
+          // print_r($notesdetail['port_id']);
+          $noteArray = explode(',', $this->input->post('selected_note_mem'));//team member array
+
+          if((!empty($noteArray[0])))
+          {
+
+           if(!empty($noteArray[0]))
+            {
+              foreach($noteArray as $n)
+                  {
+
+                  $check = $this->Front_model->check_NoteTeam($n,$nid);
+                    if($check == 0)
+                    {
+                      
+                      $data_note = array(
+                          'nid' => $nid,
+                          'portfolio_id' => $notesdetail->port_id,
+                          'nmember' => trim($n),
+                          'status' => 'send',
+                          'ncreated_by' => $this->session->userdata('d168_id'),
+                          'sent_date' => date('Y-m-d H:i:s'),
+                          'sent_notify_clear' => 'no',
+                          'access' => $this->input->post('changes'),
+                            );
+                      $data_note = $this->security->xss_clean($data_note); // xss filter
+                      // 
+                      $this->Front_model->insert_notemember($data_note);
+                      $inserted_nm_id = $this->db->insert_id();
+
+                      // $data = array(
+                      //   'port_id' => $_COOKIE["d168_selectedportfolio"],
+                      //   'user_id' => $this->session->userdata('d168_id'),
+                      //   'title' => $title,
+                      //   'content' => $text,
+                      // );
+                      // $data = $this->security->xss_clean($data); // xss filter
+                      // $this->Front_model->insert_note($data);
+
+//                       $getEmailID = $this->Front_model->getEmailID($n);
+
+//                       $getnote_portfolio_name = "";
+// $checknote_portfolio_name = $this->Front_model->getPortfolioName($notesdetail->port_id);
+// if($checknote_portfolio_name)
+// {
+//   if($checknote_portfolio_name->portfolio_user == 'company')
+//   { 
+//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
+//   }
+//   elseif($checknote_portfolio_name->portfolio_user == 'individual')
+//   { 
+//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name.' '.$checknote_portfolio_name->portfolio_lname;
+//   }
+//   else
+//   { 
+//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
+//   }
+// }
+
+// $RequestEmailID = $getEmailID->email_address;
+
+
+
+                      }
+                  }
+            }
+
+            $this->session->set_flashdata('message','Member Added Successfully!');
+            $response['status'] = TRUE;
+            header('Content-type: application/json');
+            echo json_encode($response);
+
+          }
+          else
+            {
+                    $response['status'] = 'Empty_TMember';
+                    header('Content-type: application/json');
+                    echo json_encode($response);
+            }
+
+          }
+    else
+    {
+      redirect(base_url('login'));
+    } 
+  }
+
+
+  public function NoteNotificationClearYes()
+  {
+    if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+    {
+    $nid = $this->input->post('id');
+    $notecheck = $this->Front_model->getNoteMemberById($nid);
+    if($notecheck)
+    {
+      if($notecheck->sent_notify_clear == 'no')
+      {
+      $data = array(
+       'sent_notify_clear' => 'yes',
+      );
+        $data = $this->security->xss_clean($data); // xss filter
+        $this->Front_model->updateNoteMem($data,$nid);
+        $response['status'] = TRUE;
+        header('Content-type: application/json');
+        echo json_encode($response);
+      }
+    }
+    }
+    else
+    {
+      redirect(base_url('login'));
+    } 
+  }
+
    // Notes work end
 
 }

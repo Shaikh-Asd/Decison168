@@ -1,5 +1,7 @@
 <?php
-$page = 'user-all-calls'; 
+$page = 'user-all-calls';
+if(empty($this->session->userdata('d168_user_cor_id')))
+{  
 ?>
 <!doctype html>
 <html lang="en">    
@@ -586,3 +588,6 @@ $page = 'user-all-calls';
         </script>
     </body>
 </html>
+<?php  
+}
+?>

@@ -930,7 +930,7 @@ else
         </div>
         <div class="col-lg">
         <span class="timerBtn_<?php echo $atl->tid;?>">
-        <i class="bx bx-play-circle timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i></span>
+        <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
             if($atl->flag == '1'){
@@ -961,6 +961,12 @@ else
                 $time1_task = $timer_task;
                 $time2_task = $atl->tracked_time;
 
+                $character = "'";
+                                                    
+                if (strpos($time2_task, $character) !== false) {
+                    $time2_task = str_replace($character, "", $time2_task);
+                }
+
                 $task_time1 = new DateTime($time1_task);
                 $task_time2 = new DateTime($time2_task);
             
@@ -973,6 +979,12 @@ else
                 else{
                   if($atl->tracked_time != ""){
                   $timer_task = $atl->tracked_time;
+                  $character = "'";
+                                                    
+                if (strpos($timer_task, $character) !== false) {
+                    $timer_task = str_replace($character, "", $timer_task);
+                }
+
                   }
                   else{
                   $timer_task = '00:00:00';
@@ -981,7 +993,7 @@ else
               echo trim($timer_task);
         ?>
         </span>
-            <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
+            
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
 
         </div>
@@ -1287,7 +1299,7 @@ if($privilege_only_view == 'no')
                             </div>
                             <div class="col-lg">
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
-                                <i class="bx bx-play-circle timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i>
+                                <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
                                 <span class="countersubtask_<?php echo $l_subtask->stid;?> counter_stask" data-id="<?php echo $l_subtask->stid;?>">
                                 <?php

@@ -163,6 +163,22 @@ if($stdetail)
                                                     else
                                                     {
                                                     ?>
+                                                    <div class="mb-2 col-md-5">
+                                                        <label class="col-form-label">Attached File(s)</label>
+                                                        <input class="form-control" id="tfile" name="tfile[]" multiple type="file" />
+                                                        <span class="text-danger" id="tfileErr"></span>
+                                                    </div>
+                                                    <div class="mb-2 col-md-1">
+
+                                                    </div>
+                                                    <div class="mb-3 col-md-6">
+                                                    <div class="form-group mb-2">
+                                                                <label for="estimated_stime" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
+                                                                <input id="estimated_stime" name="estimated_stime" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $stdetail->estimated_stime;?>">
+                                                                <div id="suggestionSContainer"></div>
+                                                                <span id="estimated_stimeErr" class="text-danger"></span>
+                                                             </div>
+                                                             </div>
                                                     <div class="row mb-2">
                                                         <label class="col-form-label col-lg-12">Subtask Link(s) & Comment(s)</label>
                                                         <div class="col-lg-5">
@@ -222,18 +238,7 @@ if($stdetail)
                                                     ?>
                                                     </div>
                                                     <span id="stlink_validErr" class="text-danger"></span>
-                                                    <div class="mb-2 col-md-4">
-                                                        <label class="col-form-label">Attached File(s)</label>
-                                                        <input class="form-control" id="tfile" name="tfile[]" multiple type="file" />
-                                                        <span class="text-danger" id="tfileErr"></span>
-                                                    </div>
-                                                    <div class="mb-3 col-md-4">
-                                                    <div class="form-group mb-2">
-                                                                <label for="estimated_stime" class="col-form-label">Estimated Time <span class="text-danger">*</span></label>
-                                                                <input id="estimated_stime" name="estimated_stime" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $stdetail->estimated_stime;?>">
-                                                                <span id="estimated_stimeErr" class="text-danger"></span>
-                                                             </div>
-                                                             </div>
+                                                    
                                                 </div>    
                                                     <div class="row float-end">
                                                         <div class="justify-content-end float-end">
@@ -276,7 +281,64 @@ else
 <script src="<?php echo base_url();?>assets/libs/select2/js/select2.min.js"></script>
 <!-- bootstrap datepicker -->
 <script src="<?php echo base_url();?>assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
-<script src="<?php echo base_url('assets/js/front.js');?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/front.js');?>"></script> -->
+<script type="text/javascript">
+    // FOR EDIT SUBTASK FORM ----------------------------------------
+  $('#edit_subtask_form').on('submit',function(event){ 
+    // debugger;   
+    event.preventDefault(); // Stop page from refreshing
+    $('#edit_subtask_button').hide();
+    $('#loader2').css('visibility','visible');
+   var formData = new FormData(this); 
+    $.ajax({
+         url:base_url+'front/edit_subtask',
+         type:"POST",
+         data:formData,
+         contentType:false,
+         processData:false,
+         cache:false,
+         success: function(data){
+          if (data.status == false)
+          {
+            //show errors
+            $('[id*=Err]').html('');
+            $.each(data.errors, function(key, val) {
+                var key =key.replace(/\[]/g, '');
+                key=key+'Err';
+                //console.log(key);    
+                $('#'+ key).html(val);
+            })
+            $('#edit_subtask_button').show();
+            $('#loader2').css('visibility','hidden');  
+          }
+          else if(data.status == 'file_uploadSizeErr')
+          {
+            $('#tfileErr').html('Oops Size is Large! It must be less than 2MB.');
+            $('#edit_subtask_button').show();
+            $('#loader2').css('visibility','hidden');
+          }
+          else if(data.status == 'Error_Uploading')
+          {
+            $('#tfileErr').html('File Uploading Error! Please Try Again!');
+            $('#edit_subtask_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == 'stlink_valid')
+          {
+            $('#stlink_validErr').html('Please Enter Valid Link!');
+            $('#edit_subtask_button').show();
+            $('#loader2').css('visibility','hidden');           
+          }
+          else if(data.status == true){
+            //debugger;
+            window.location.reload();
+          }
+          //console.log(data);
+       }// success msg ends here
+
+     });
+  });
+    </script>
 <script type="text/javascript">
     $(document).ready(function(){
 //plink clone

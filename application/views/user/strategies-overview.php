@@ -991,7 +991,72 @@ else
                                                 echo $sdetail->sdes;
                                             }
                                         ?></p>
+                                        <div class="row task-dates">
+                                        <?php
+                                        $est = 0; // Variable to store the sum of estimated times
+                                        $trc = 0;
+                                        $total_seconds = 0;
+                                        $totalTime = "00:00:00";
 
+                                        function timeStringToMinutes($timeString) {
+                                          list($hours, $minutes) = sscanf($timeString, '%dh%dm');
+                                          return $hours * 60 + $minutes;
+                                        }
+                                        
+                                        function minutesToTimeString($totalMinutes) {
+                                          $hours = floor($totalMinutes / 60);
+                                          $minutes = $totalMinutes % 60;
+                                          return sprintf('%dh %02dm', $hours, $minutes);
+                                        }
+                                      // Assuming $Goal_tasks is an array of objects with 'estimated_time' property
+                                      function calculateTotalTime($Goal_tasks) {
+                                          $totalMinutes = 0;
+                                          
+                                          foreach ($Goal_tasks as $time) {
+                                              $estimatedTime = $time->estimated_time;
+                                              $totalMinutes += timeStringToMinutes($estimatedTime);
+                                          }
+                                      
+                                          return minutesToTimeString($totalMinutes);
+                                      }
+                                        
+                                        $est = calculateTotalTime($Strategy_tasks);
+
+                                        foreach ($Strategy_tasks as $item) {
+                                          $tracked_time = $item->tracked_time;
+
+                                            $character = "'";
+                                                                                        
+                                            if (strpos($tracked_time, $character) !== false) {
+                                                $tracked_time = str_replace($character, "", $tracked_time);
+                                            } else {
+                                            }
+                                            // Create DateTime objects for the current time and the total time
+                                            $datetime1 = DateTime::createFromFormat('H:i:s', $tracked_time);
+                                            $datetime2 = DateTime::createFromFormat('H:i:s', $totalTime);
+
+                                            // Add the current time to the total time
+                                            $datetime2->add(new DateInterval('PT' . $datetime1->format('H') . 'H' . $datetime1->format('i') . 'M' . $datetime1->format('s') . 'S'));
+
+                                            // Update the total time
+                                            $totalTime = $datetime2->format('H:i:s');
+                                        }
+                                        ?>
+                                            <div class="col-sm-4">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14"><i class="bx bx-time-five me-1 text-d"></i> Time Estimated</h5>
+                                                    <p class="text-muted mb-0 " style="margin-left: 22px;"><?php echo $est; ?></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="mt-4">
+                                                    <h5 class="font-size-14"><i class="bx bx-timer me-1 text-d"></i>  Time Tracked</h5>
+                                                    <p class="text-muted mb-0 " style="margin-left: 22px;"><?php echo $totalTime; ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- lasjd -->
                                         <div class="row task-dates">
                                             <div class="col-sm col-6">
                                                 <div class="mt-4">
@@ -1079,7 +1144,38 @@ else
                                                     echo '<strong>PROJECT:</strong>  ';
                                                    }
                                                     echo '<span class="ms-1">'.$pr->pname.'</span>';
-                                                ?> 
+
+                                                    $p_tasks = $this->Front_model->p_tasks($pr->pid);
+
+                                                                        $estg = 0; // Variable to store the sum of estimated times
+                                                                      $trcg = 0;
+                                                                      $total_secondsg = 0;
+                                                                      $totalTimeg = "00:00:00";
+                                                                      $estg = calculateTotalTime($p_tasks);
+
+                                                                      foreach ($p_tasks as $itemg) {
+                                                                          $tracked_timeg = $itemg->tracked_time;
+                                                                          $characterg = "'";
+                                                                                                                      
+                                                                          if (strpos($tracked_timeg, $characterg) !== false) {
+                                                                              $tracked_timeg = str_replace($characterg, "", $tracked_timeg);
+                                                                          } else {
+                                                                          }
+                                                                          // Create DateTime objects for the current time and the total time
+                                                                          $datetime1g = DateTime::createFromFormat('H:i:s', $tracked_timeg);
+                                                                          $datetime2g = DateTime::createFromFormat('H:i:s', $totalTimeg);
+
+                                                                          // Add the current time to the total time
+                                                                          $datetime2g->add(new DateInterval('PT' . $datetime1g->format('H') . 'H' . $datetime1g->format('i') . 'M' . $datetime1g->format('s') . 'S'));
+
+                                                                          // Update the total time
+                                                                          $totalTimeg = $datetime2g->format('H:i:s');
+                                                                      }
+                                                                      ?>
+
+                                                                        <strong style="margin-left: 15px;">Time Estimated:</strong> <span class="ms-1 new_sname"><?php echo $estg;?></span>
+                                                                        <strong style="margin-left: 15px;">Time Tracked:</strong> <span class="ms-1 new_sname"><?php echo $totalTimeg;?></span>
+
                                               </button>
                                             </h2>
                                             <div id="panelsStayOpen-collapseThree<?php echo $sid.$pr->pid;?>" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree<?php echo $sid.$pr->pid;?>">
@@ -1148,7 +1244,7 @@ else
                                                         }
                                                         ?>
                                                     </div>
-                                                    <div class="col-2">
+                                                    <div class="col">
                                                         <a href="javascript: void(0);" class="nameLink float-end h4" onclick="return ProjectOverviewModal(<?php echo $pr->pid;?>)" title="Preview Project"><i class="mdi mdi-eye-outline"></i></a>
                                                     <?php
                                                     if($p_tasks || $p_subtasks)
