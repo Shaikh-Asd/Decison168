@@ -28,9 +28,9 @@
       <link href="<?php echo base_url();?>assets/css/new-cards.css" rel="stylesheet" type="text/css" />
    </head>
    <style>
+      
         .large-textarea {
             height: 765px;
-            border: none;
             padding: 0px 25px 0px 25px;
             font-size: 16px;
         }
@@ -105,34 +105,9 @@
          <div class="main-content">
             <div class="page-content">
                <div class="container-fluid">
-               
-                  <!-- start page title -->
-                  <!-- <div class="row">
-                     <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                           <h4 class="mb-sm-0 font-size-18">Notes</h4>
-                           
-                        </div>
-                     </div>
-                  </div> -->
-                  <!-- end page title -->
                   <div class="row">
                      <div class="col-12">
                         <!-- Left sidebar -->
-                        <!-- <div class="row">
-                          
-
-                           <div class="col-md-3">
-                           <div class="card">
-                        <div class="input-group mb-2">
-                              <input type="text" class="form-control" placeholder="Search..." id="search-note-list" style="line-height: 1.5; border: none;padding: 15px 5px 5px 30px;">
-                              <button type="button" class="btn bg-transparent" style="line-height: 0.5; margin-left: -40px; z-index: 100; display: block;" id="search-clear-list">
-                              <i class="fa fa-times"></i>
-                              </button>
-                        </div>
-                        </div>
-                           </div>
-                        </div> -->
                         <div class="row mb-3">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between" style="padding-bottom: 0px !important;">
@@ -155,8 +130,7 @@
                                     <i class="mdi mdi-view-grid-outline"></i>
                                 </a>
                             </li>
-                
-                                        </ul>
+                        </ul>
                     </div>
                 </div>
                 <div class="col-6">                    
@@ -173,11 +147,8 @@
                 <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="New" onclick="newNote()" style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;"><i class="mdi mdi-content-save-edit-outline"></i></a>
             </div> 
             <div class="btn-group me-2 mb-2 mb-sm-0" style="float: right; margin-left:30px; display:none" id="updateShow" >
-            <!-- <button type="button" class="btn btn-danger btn-block waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#shareNoteModal">
-                        Compose
-                  </button> -->
                <a class="h3 eye_preview float-end me-1" href="javascript:void(0)"  data-bs-toggle="modal" data-bs-target="#shareNoteModal" onclick="shareNote(this);" id="shrNote" data-shrid="" style="padding: 0 !important;padding-top: 4px !important;font-size: 1.1rem;" title="Share"><i class="fas fa-share-alt"></i></a>   
-               <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="duplicateNote(this);" id="dupNote" data-dupid="" style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;" title="Duplicate"><i class="mdi mdi-content-duplicate"></i></a>   
+               <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="duplicateNote(this);" id="dupNote" data-dupid="" data-index="0"style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;" title="Duplicate"><i class="mdi mdi-content-duplicate"></i></a>   
                <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="Save" onclick="updateNote()" id="saveNote" data-updateid="" style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;"><i class="mdi mdi-content-save-all-outline"></i></i></a>
                 <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="New" onclick="newNote()" style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;"><i class="mdi mdi-content-save-edit-outline"></i></a>
                 <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="deleteNote()" id="deleteNote" data-deleteid="" style="padding: 0 !important;padding-top: 3px !important;font-size: 1.2rem;" title="Delete"><i class="bx bx-trash"></i></a>
@@ -193,21 +164,8 @@
    <div class ="tab-content" id="v-pills-tabContent">
    <div class="tab-pane fade active show" id="v-pills-list" role="tabpanel" aria-labelledby="v-pills-list-tab">
                         <div class="email-leftbar card ScrollStyle" id="notes-list">
-                        <div class="input-group mb-2">
-                           <!-- <span class="bx bx-search-alt"></span> -->
-                         
-
-                           
-                          
-                           <!-- <input type="text" class="form-control" placeholder="Search..." id="search-note-list" style="line-height: 1.5; border: none; background-color: rgba(120,120,128,.16); border-radius: 10px;"> -->
-                           <!-- <button type="button" class="btn bg-transparent" style="line-height: 0.5; margin-left: -40px; z-index: 100; display: none;" id="search-clear-list">
-                              <i class="fa fa-times"></i>
-                              </button> -->
-                              
-                        </div>
+                        
                            <?php 
-                           // print_r($getNotesMem);
-                           // print_r('$getNotesMem');
                            if ($getNotesMem){
                            ?>
                            <div class="mail-list " >
@@ -239,8 +197,15 @@
                             $dateString = $note->updated_at;
                             $dateTime = new DateTime($dateString);
                             $newTime = $dateTime->format("h:i A");
+
+               if($note->user_id == $this->session->userdata('d168_id')){
+                  $access = '';
+               }
+               else{
+                  $access = $note->access;
+               }
                            ?>
-                           <div class="note-list note-line_<?php echo $note->id ?>" onclick="noteView(<?php echo $note->id.','.$note->access ?>)">
+                           <div class="note-list note-line_<?php echo $note->id ?>" onclick="noteView(<?php echo $note->id.','.$access ?>)">
                              <a style="font-size: 16px; font-weight: 1000; color: #000;" href="javascript: void(0);" class="" ><?php echo $title;?></a>
                              <span style="margin-left: 5px; font-weight: 1000; color: #000;"><?php echo $newTime;?></span>
                              <span><?php echo strip_tags($title_new);?></span>
@@ -264,19 +229,7 @@
                         <!-- End Left sidebar -->
                         <!-- Right Sidebar -->
                         <div class="email-rightbar mb-3" id="notes-data">
-                           <!-- <div class="card"> -->
-                                <!-- <div class="btn-toolbar p-3" role="toolbar">
-                                 <div class="btn-group me-2 mb-2 mb-sm-0">
-                                 <button type="button" class="btn btn-d btn-sm" onclick="myFunction()">Save</button>   
-                                </div>                                 
-                              </div> -->
-                              <!-- <span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span>
-                              <input type="hidden" class="large-texttile" id="notes_title" placeholder="Title" onkeyup="cleanErr()"> -->
-                              <!-- <textarea class="large-textarea" id="notes" placeholder="Notes" onkeyup="cleanErr()"></textarea> -->
- 
-                           <!-- </div> -->
-                           <!-- <button type="button" class="btn btn-d btn-sm" onclick="myFunction()">Save</button>    -->
-                               <span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span> 
+                           <span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span> 
 
                            <textarea class="form-control form-white" placeholder="Enter Notes" name="meeting_agenda" id="notes" onkeyup="cleanErr()"></textarea>
 
@@ -303,27 +256,6 @@
                      display: none !important;
                   }
                 </style>
-                <!-- <textarea id="checklist">
-                <ul class="tox-checklist">
-                    </ul>
-                </textarea> -->
-                <!-- <textarea class="form-control form-white" placeholder="Enter Notes" name="meeting_agenda" id="meeting_agenda"></textarea> -->
-
-            <!-- </div> -->
-                           <!-- card -->
-                           <!-- <div class="row">
-                              <div class="col-7">
-                                 Showing 1 - 20 of 1,524
-                              </div>
-                              <div class="col-5">
-                                 <div class="btn-group float-end">
-                                    <button type="button" class="btn btn-sm btn-success waves-effect"><i class="fa fa-chevron-left"></i></button>
-                                    <button type="button" class="btn btn-sm btn-success waves-effect"><i class="fa fa-chevron-right"></i></button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div> -->
-                        <!-- end Col-9 -->
                      </div>
                   </div>
                   </div>
@@ -362,7 +294,6 @@
                               ?>
   <div class="col-md-6 col-xs-12 col-lg-3 search-cards note-list" >
    <section ng-repeat="new_card in new_cards" class="new_card theme-red drag_card" id="click_card<?php echo $note->id?>" data-color="#52A43A" data-index="<?php echo $nstep?>">
-   <!-- <section ng-repeat="new_card in new_cards" class="new_card theme-red " id="click_card<?php echo $note->id?>" data-color="#52A43A" onclick="return deleteMultiple(this);"> -->
       <section class="new_card__part new_card__part-2">
          <div class="new_card__part__side m--back">
             <div class="new_card__part__inner new_card__face">
@@ -393,7 +324,6 @@
                   <p class="ng-binding" id="task-duedate9"><?php echo $newDate?></p>
                 </div>
                <?php
-               print_r($note->access);
                if($note->user_id == $this->session->userdata('d168_id')){
                   ?>
 
@@ -401,7 +331,7 @@
                   <p class="ng-binding"></p>
                   <div class="avatar-group">
                      <div class="btn-group me-2 mb-2 mb-sm-0" >
-                     <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="duplicateNoteGrid(this);" id="dupNote" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;" title="Duplicate" data-dupid="<?php echo $note->id?>"><i class="mdi mdi-content-duplicate"></i></a>
+                     <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="duplicateNote(this);" id="dupNote" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;" title="Duplicate" data-dupid="<?php echo $note->id?> " data-index="1"><i class="mdi mdi-content-duplicate"></i></a>
                      <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="Save" onclick="editNote(<?php echo $note->id.','.$note->access?>)" id="saveNote" data-updateid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 5px;"><i class="mdi mdi-file-document-edit-outline"></i></i></a>
                      <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" title="New" onclick="editNewNote()" style="padding: 0 !important;font-size: 1.2rem; margin-left: 10px;"><i class="mdi mdi-content-save-edit-outline"></i></a>
                      <a class="h3 eye_preview float-end me-1" href="javascript:void(0)" onclick="deleteNoteGrid(<?php echo $note->id?>)" id="deleteNote" data-deleteid="" style="padding: 0 !important;font-size: 1.2rem; margin-left: 8px; padding-top: 1px !important;" title="Delete"><i class="bx bx-trash"></i></a>
@@ -445,65 +375,25 @@
                      <div class="modal-body">
                            <div class="row mb-2">
                               <div class="col-lg">
-                              <?php
-                                                if(isset($_COOKIE["d168_selectedportfolio"]))
-                                                {
-                                                    $porttm = $this->Front_model->getAccepted_PortTM($_COOKIE["d168_selectedportfolio"]);
-                                                ?>
-                           <select name="note_mem"  class=" form-control note_mem pro_team_member" multiple="multiple" data-placeholder="Add Team Members..." onchange="return Note_Members();">
-
-                            <?php                                           
-                                if($porttm){
-                                    foreach ($porttm as $ptm) {
-                                        $m = $this->Front_model->selectLogin($ptm->sent_to);
-                                        if($m){
-                                       
-                                          $check_nm = $this->Front_model->check_nm($_COOKIE["d168_selectedportfolio"]);
-                                          // print_r($check_nm);
-                                          $check_nmem = "";
-                                    if($check_nm)
-                                    {
-                                        $check_nmem = $check_nm->nmember;
-                                       //  print_r($check_nmem);
-                                    }
-
-                                       //  if($m->reg_id != $this->session->userdata('d168_id') && ($m->reg_id != $check_nmem))
-                                        if($m->reg_id != $this->session->userdata('d168_id'))
-                                            {
-                                        ?>
-                                        <option value="<?php echo $m->reg_id;?>"><span><?php echo $m->first_name." ".$m->last_name; ?></span></option>
-                                        <?php
-                                            }
-                                        }
-                                        }
-                                    }
-                                  ?>
+                            <select name="note_mem"  id="note_add_mem" class=" form-control note_mem pro_team_member" multiple="multiple" data-placeholder="Add Team Members..." onchange="return Note_Members();" required>
                            </select>
                            <input type="hidden" name="selected_note_mem" id="selected_note_mem">
-
-                           <?php
-                                                }
-                                                ?>
                               </div>
                               <input type="hidden" name="total_note" id="total_note" value="">
-                           <!-- <div class="col-lg-5">
-                              <button type="button" class="add_more_member btn btn-d text-white">Invite More Member</button>
-                           </div>                -->
-                        </div>
-                        
-                                 
+                           </div>
                         <div class="imember_div">
                         </div>
                         <span id="err_valid" class="text-danger"></span>
-                        <input class="form-check-input ms-2 changes" type="checkbox" name="changes" value="1">
+                        <input class="form-check-input ms-2 changes" type="checkbox" name="changes" value="1" id="write" >
                         <label class="form-check-label" for="changes">
-                           Added
+                           Edit
                         </label>
-                        <input class="form-check-input ms-2 changes" type="checkbox" name="changes"  value="2">
+                        <input class="form-check-input ms-2 changes" type="checkbox" name="changes"  value="2" id="read">
                         <label class="form-check-label" for="view">
                         View only
                         </label>
                   </div>
+                  <span id="checkboxErr" class="text-danger" style="margin-left: 25px;"></span>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light bg-d text-white" data-bs-dismiss="modal">Close</button>
                     <button type="submit" id="note_AddTeamMemberButton" class="btn btn-d">ADD</button>
@@ -514,6 +404,37 @@
                </div>
             </div>
             <!-- end modal -->
+
+             <!-- Project Duplicate Modal -->
+             <div id="duplicate_noteModal" class="modal fade" tabindex="-1" aria-labelledby="#duplicate_noteModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                     <div class="modal-content" id="duplicate_noteModal_content">
+                     <div class="modal-header">
+    <h5 class="modal-title mt-0" id="duplicate_noteModalLabel">Copy Note</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="dupid-data" value="">
+    <form method="post" class="duplicate_note_form" name="duplicate_note_form" id="duplicate_note_form" autocomplete="off">
+    <div class="row mb-2">
+          <label for="nname" class="col-form-label col-lg-3">Note Name <span class="text-danger">*</span></label>
+          <div class="col-lg-9">
+              <input id="nname" name="nname" type="text" class="form-control" placeholder="Enter Note Name..." required="" value="">
+              <span id="nnameErr" class="text-danger"></span>
+          </div>
+      </div>
+    <div class="row">
+          <div class="col-lg-12">
+              <button type="submit" id="duplicate_note_button" class="btn btn-d btn-sm float-end">Duplicate</button>
+              <img id="loader2" class="float-end" style="visibility: hidden;" src="<?php echo base_url()?>assets/images/loading.gif">
+          </div>
+      </div>
+      </form>
+    </div>
+
+                     </div><!-- /.modal-content -->
+                  </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
             
             <?php
@@ -533,19 +454,9 @@
       <script src="<?php echo base_url();?>assets/libs/node-waves/waves.min.js"></script>
       <script src="<?php echo base_url();?>assets/libs/select2/js/select2.min.js"></script>
       <script src="<?php echo base_url();?>assets/libs/jquery-ui-dist/jquery-ui.min.js"></script>
+      <!-- <script src="https://cdn.tiny.cloud/1/mbozjrs9xdctrp60i6p8fpnr2yqnvr53fecxu7qpznwjjnt6/tinymce/5-stable/tinymce.min.js"></script> -->
+      <script src="<?php echo base_url();?>assets/libs/tinymce_notes/js/tinymce/tinymce.min.js"></script>
 
-      <!--tinymce js-->
-            <!-- <script src="https://cdn.tiny.cloud/1/7v7gor314fr62t10k0vg4eqgh84efoxsibchc4767ohrfzas/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
-                  <!-- <script src="<?php echo base_url();?>assets/libs/tinymce/tiny.js"></script> -->
-      <!-- <script src="<?php echo base_url();?>assets/libs/tinymce_notes/js/tinymce/tinymce.min.js"></script> -->
-      <!-- <script src="<?php echo base_url();?>assets/libs/tinymce/tinymce.min.js"></script> -->
-      <!-- email editor init -->
-      <!-- <script src="<?php echo base_url();?>assets/js/pages/email-editor.init.js"></script> -->
-      <!-- App js -->
-      <!-- <script src="<?php echo base_url();?>assets/js/app.js"></script> -->
-      <!-- <script src="<?php echo base_url();?>assets/js/front.js"></script> -->
-      <!-- <script src="<?php echo base_url();?>assets/js/function.js"></script> -->
-      
       <?php
          include('footer_links.php');
          ?>
@@ -565,34 +476,10 @@
     });
 </script>
 
-         <!-- <script>
-  // Get references to the checkboxes
-  const changesCheckbox = document.getElementsByClassName("changes");
-  const viewCheckbox = document.getElementsByClassName("view");
-
-  // Add event listeners to the checkboxes
-  changesCheckbox.addEventListener("change", function() {
-    if (changesCheckbox.checked) {
-      // If "Can make changes" is checked, uncheck "View only"
-      viewCheckbox.checked = false;
-    }
-  });
-
-  viewCheckbox.addEventListener("change", function() {
-    if (viewCheckbox.checked) {
-      // If "View only" is checked, uncheck "Can make changes"
-      changesCheckbox.checked = false;
-    }
-  });
-</script> -->
          <script>
             var apopt;
             $(document).ready(function(){
-   
 
-// // Extract and display the option values
-// var optionValues = Array.from(options).map(option => option.value);
-// console.log(options);
 
    var add_more_member  = $('.add_more_member '); //Add button selector
    var imember_div = $('.imember_div'); //Input field wrapper
@@ -602,14 +489,6 @@
    var a = 2;
    
    var note_new = $('.note_new'); //Input field wrapper
-
-
-     
-
-//    var selectElement = document.querySelector('select[name="note_mem"]');
-//             console.log(selectElement);
-// // Get the options from the select element
-// var options = selectElement.querySelectorAll('option');
 
    //Once add button is clicked
    $(add_more_member ).click(function(){
@@ -649,17 +528,6 @@ sourceSelects.forEach(function(sourceSelect) {
     });
 });
 
-//     console.log(options);
-
-//     // Extract and display the entire option tags
-//  options.forEach(option => 
-//  console.log(note_new);
-// //  apopt = option.outerHTML,
-//  console.log(option.outerHTML),
-//   $(note_new).append(option.outerHTML),
-//  );
-//  console.log(apopt);
-
    });
 
    $(imember_div).on('click', '.add_more_member2', function(e){
@@ -693,37 +561,27 @@ sourceSelects.forEach(function(sourceSelect) {
 </script>
          <script>
 function shareNote(event) {
+    //  debugger;
+
    var id = $(event).attr('data-shrid');
-   $('#total_note').val(id);
+   
+  //  $('.note_mem').attr("data-id",id);
+    $('#total_note').val(id);
 
+    $.ajax({
+        url: base_url + 'front/get_noteMem',
+        type: 'POST',
+        data: {
+            note_id: id
+        },
+        success: function(data9) {
+          $('#note_add_mem').html(data9);
 
-   // $.ajax({
-   //      url: base_url + 'front/get_note_mem',
-   //      type: 'POST',
-   //      data: {
-   //          id: id
-   //      },
-   //      success: function(data9) {
+        }
+      });
 
-   //      }
-   //    });
-
-   // var url55 = `notes-list?data-noteid=${encodeURIComponent(id)}`;
-   // console.log(url55);
-   // var xhttp = new XMLHttpRequest();
-   // xhttp.onreadystatechange = function() {
-   //    if (this.readyState == 4 && this.status == 200) {
-   //       // Handle the response from the PHP script (if needed)
-   //       var response = this.responseText;
-   //       console.log("Response from PHP:", response);
-   //    }
-   // };
-   // xhttp.open("POST", "notes-list", true);
-   // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-   // xhttp.send("note_uid=" + encodeURIComponent(id));
 
   
-//   $('#note_AddTeamMemberForm').load(document.URL + ' #note_AddTeamMemberForm'+'>*'); 
 }
 var arr = [];
 
@@ -766,7 +624,6 @@ function removeSelected(id) {
 function deleteMultipleNote() {
 
 
-   // var deleteIds = arr;
 
    var deleteIds = arr.map(function(str) {
    return parseInt(str.match(/\d+$/)[0]);
@@ -800,10 +657,14 @@ function deleteMultipleNote() {
 });
 
 }
-function duplicateNoteGrid(element) {
-   // alert(id);
-   var dataId = element.getAttribute('data-dupid');
-   // duplicateNote();
+
+   $('#duplicate_notegrid_form').on('submit',function(event){
+   //  debugger;
+    event.preventDefault(); // Stop page from refreshing
+    $('#duplicate_note_button').hide();
+    $('#loader2').css('visibility','visible');
+  
+   var dataId = $('#dupid-data').val();
 
    Swal.fire({
       title: "Are you sure?",
@@ -832,8 +693,6 @@ $.ajax({
             var content3 = data3[j].content;
             var title3 = data3[j].title;
             var id3 = data3[j].id;
-            // console.log(title);
-            // var notesEditor = tinymce.get('notes');
             
                   $.ajax({
         url: base_url + 'front/store_duplicate_note',
@@ -856,8 +715,6 @@ $.ajax({
             })
           }
           else{
-            // notesEditor.setContent('');
-            // $("#notes_title").val('');
             Swal.fire("Duplicate!", "Successfully.", "success");
             var divElement = document.getElementById('notes-list');
                 if (divElement) {
@@ -871,16 +728,23 @@ $.ajax({
             tinymce.remove('#notes_update'+id5);
          tinymce.init({
       selector: 'textarea#notes_update'+id5,
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
+      inline_boundaries: false
     });
            
             $('#saveNote').attr("data-updateid",id5);
@@ -907,22 +771,37 @@ $.ajax({
       });
       }
    });
-}
+});
 function duplicateNote(elements) {
-   Swal.fire({
-      title: "Are you sure?",
-      text: "You want to duplicate note!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#c7df19",
-      cancelButtonColor: "#383838",
-      confirmButtonText: "Yes"
-   }).then(function(result) {
-      if (result.value) {
-   var id = elements.getAttribute('data-dupid');
+      var id = elements.getAttribute('data-dupid');
+     
 
-         // var id = $('#dupNote').attr("data-dupid");
-   console.log(id);
+   $.ajax({
+    url:  base_url+'front/get_note',
+    type: 'post',
+    data: {id: id},
+    success: function(data){ 
+
+      var data = JSON.parse(data); 
+      
+         for (var j = 0; j <data.length; j++) {
+            // var content = data[j].content;
+            var title = data[j].title;
+            var id = data[j].id;
+            $('#nname').val(title +' ' +'[copy]'); 
+            $('#dupid-data').val(id); 
+            $('#duplicate_noteModal').modal('show'); 
+         }
+    }
+  });
+}
+   $('#duplicate_note_form').on('submit',function(event){
+   //  debugger;
+    event.preventDefault(); // Stop page from refreshing
+    $('#duplicate_note_button').hide();
+    $('#loader2').css('visibility','visible');
+  var id = $('#dupid-data').val();
+
    $.ajax({
         url: base_url + 'front/get_note',
         type: 'POST',
@@ -930,23 +809,19 @@ function duplicateNote(elements) {
             id: id
         },
         success: function(data) {
-         var data = JSON.parse(data); 
-         console.log(data);
-        
-
+         var data = JSON.parse(data);         
          for (var j = 0; j <data.length; j++) {
             var content = data[j].content;
-            var title = data[j].title;
+            // var title = data[j].title;
             var id = data[j].id;
-            console.log(title);
-            // var notesEditor = tinymce.get('notes');
-            
-                  $.ajax({
+
+            var new_title = $('#nname').val();
+      $.ajax({
         url: base_url + 'front/store_duplicate_note',
         type: 'POST',
         data: {
             text: content,
-            title: title
+            title: new_title
         },
         success: function(data) {  
         if (data.status == false)
@@ -962,48 +837,57 @@ function duplicateNote(elements) {
             })
           }
           else{
-            // notesEditor.setContent('');
-            // $("#notes_title").val('');
+            $('#duplicate_noteModal').modal('hide'); 
             Swal.fire("Duplicate!", "Successfully.", "success");
             var divElement = document.getElementById('notes-list');
                 if (divElement) {
                     $('#notes-list').load(document.URL + ' #notes-list'+'>*');  
                 }
-
-            
+                noteView(data.id,'');
             var id2 = data.id;
 
-                $('#notes-data').html('<div class="card"><span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span><textarea class="form-control form-white notesupdate" placeholder="Enter Notes" name="meeting_agenda_up" id="notes_update'+id2+'">'+content+'</textarea></div></div>');
-            tinymce.remove('#notes_update'+id2);
-         tinymce.init({
+      $('#notes-data').html('<div class="card"><span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span><textarea class="form-control form-white notesupdate" placeholder="Enter Notes" name="meeting_agenda_up" id="notes_update'+id2+'">'+content+'</textarea></div></div>');
+      tinymce.remove('#notes_update'+id2);
+      tinymce.init({
       selector: 'textarea#notes_update'+id2,
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
+      inline_boundaries: false
     });
             $('#saveNote').attr("data-updateid",id2);
             $('#deleteNote').attr("data-deleteid",id2);
             $('#dupNote').attr("data-dupid",id2);
             $('#shrNote').attr("data-shrid",id2);
 
-               //  }
+   
+   $('#v-pills-grid').load(document.URL + ' #v-pills-grid'+'>*');  
+   $('#createShow').hide();
+                $('#updateShow').show();
+                $('#duplicate_note_button').show();
+            $('#loader2').css('visibility','hidden');  
+      
             }
         }
     });
          }
         }
       });
-      }
-   });
    
-}
+});
 
  // Function to remove the 'data' parameter from the URL
  function removeDataParameterFromURL() {
@@ -1023,8 +907,6 @@ function duplicateNote(elements) {
         
 
 function noteView(id,id2) {
-   // debugger;
-   // var notes = tinymce.get('notes');
 
     $.ajax({
         url: base_url + 'front/get_note',
@@ -1044,7 +926,7 @@ function noteView(id,id2) {
             // notes.setContent(content);
          }
          if(id2 == '2'){
-            alert('opip');
+
             $('#createShow').show();
             $('#updateShow').hide();
             $('.save_fun').hide();
@@ -1059,8 +941,6 @@ function noteView(id,id2) {
             height: 500,
             toolbar_mode: 'sliding',
             statusbar: false,
-            // toolbar: false,
-            menubar:false,
             visual: false,
       });
          }
@@ -1073,26 +953,27 @@ function noteView(id,id2) {
             $('#deleteNote').attr("data-deleteid",id);
             $('#dupNote').attr("data-dupid",id);
             $('#shrNote').attr("data-shrid",id);
-            // $('#total_name').val(id);
-
-            // alert(id)
             $(".note-line_"+id).addClass("note-active");
          tinymce.remove('#notes_update'+id);
          tinymce.init({
       selector: 'textarea#notes_update'+id,
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu ',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
-   //    readonly: true, // Enable read-only mode
-   //  toolbar: false, // Hide the toolbar for read-only mode
-   //  menubar: false, // Hide the menubar for read-only mode
+      inline_boundaries: false
     });
          }
             
@@ -1102,61 +983,12 @@ function noteView(id,id2) {
 
     // Call the function to remove the 'data' parameter on page load
     removeDataParameterFromURL();
-   //  tinymce.activeEditor.mode.set("readonly");
 }
 
-// function noteView2(id) {
-//    // debugger;
-//    var notes = tinymce.get('notes');
 
-//     $.ajax({
-//         url: base_url + 'front/get_note',
-//         type: 'POST',
-//         data: {
-//             id: id
-//         },
-//         success: function(data) {
-//          $(".note-list").removeClass("note-active");  
-
-//             var data = JSON.parse(data);  
-//             for (var j = 0; j <data.length; j++) {
-//             var content = data[j].content;
-//             var title = data[j].title;
-//             var id = data[j].id;
-//             $('#notes-data').html('<div class="card"><span id="textErr" class="text-danger" style="padding:10px 0px 0px 20px;"></span><textarea class="form-control form-white notesupdate" placeholder="Enter Notes" name="meeting_agenda_up" id="notes_update'+id+'">'+content+'</textarea></div></div>');
-//             // notes.setContent(content);
-//          }
-//             $('#createShow').show();
-//             // $('#updateShow').show();
-//             // $('#saveNote').attr("data-updateid",id);
-//             // $('#deleteNote').attr("data-deleteid",id);
-//             // $('#dupNote').attr("data-dupid",id);
-//             // $('#shrNote').attr("data-shrid",id);
-//             // $('#total_name').val(id);
-
-//             // alert(id)
-//             $(".note-line_"+id).addClass("note-active");
-//          tinymce.remove('#notes_update'+id);
-//          tinymce.init({
-//       readonly: true, // Enable read-only mode
-//       toolbar: false, // Hide the toolbar for read-only mode
-//       menubar: false, // Hide the menubar for read-only mode
-//       });
-
-//         }
-//     });
-
-//     // Call the function to remove the 'data' parameter on page load
-//     removeDataParameterFromURL();
-//    //  tinymce.activeEditor.mode.set("readonly");
-// }
 
 function myFunction() {
       var x = document.getElementById("notes");
-      //  var y = $("#notes").val();
-      // var z = $("#notes_titl/e").val();
-      // var y = (((tinyMCE.get('notes').getContent()).replace(/(&nbsp;)*/g, "")).replace(/(<p>)*/g, "")).replace(/<(\/)?p[^>]*>/g, "");
-      
       var y=tinyMCE.get('notes').getContent();
       var notesEditor = tinymce.get('notes');
 
@@ -1191,16 +1023,17 @@ function myFunction() {
             }
         }
     });
-    //   x.value = x.value.toUpperCase();
     }
 
     function updateNote() {
    //  var z = $("#notes").val();
    var id = $('#saveNote').attr("data-updateid");
-    var z =tinyMCE.get('notes_update'+id).getContent();
+   x = $("#notes_title").val();
       var notesEditor = tinymce.get('notes_update'+id);
+      var  z =tinyMCE.get('notes_update'+id).getContent();
+      
+    
 
-    var x = $("#notes_title").val();
     $.ajax({
         url: base_url + 'front/updateNote',
         type: 'POST',
@@ -1225,19 +1058,6 @@ function myFunction() {
     });
     }
   
-         // notification redirect start
-      //    function getQueryVariable(variable) {
-      //                var query = window.location.search.substring(1);
-      //                var vars = query.split("&");
-      //                for (var i = 0; i < vars.length; i++) {
-      //                   var pair = vars[i].split("=");
-      //                   if (decodeURIComponent(pair[0]) === variable) {
-      //                      return decodeURIComponent(pair[1]);
-      //                   }
-      //                }
-      //          }
-      //   var myFinalValue = getQueryVariable('data');
-
       
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
@@ -1347,17 +1167,23 @@ console.log("aID:", aID);   // Output: 456
             tinymce.remove('#notes');
       tinymce.init({
       selector: 'textarea#notes',
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
-      inline_boundaries: false,
+      inline_boundaries: false
     });
         }
     });
@@ -1409,17 +1235,23 @@ console.log("aID:", aID);   // Output: 456
       tinymce.remove('#notes');
       tinymce.init({
       selector: 'textarea#notes',
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
-      inline_boundaries: false,
+      inline_boundaries: false
     });
     }
     function cleanErr() {
@@ -1493,20 +1325,52 @@ console.log("aID:", aID);   // Output: 456
                 $('.note-list').show();
                 $('#search-clear-list').css('display','none');  
           });
-         tinymce.init({
-      selector: 'textarea#notes',
-      plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
-      contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
-      toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
-      width: "100%",
+      //    tinymce.init({
+      // selector: 'textarea#notes',
+      // plugins: 'anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
+      // contextmenu: 'copy cut paste | link inserttable | cell row column deletetable',
+      // toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+      // width: "100%",
+      // height: 500,
+      // toolbar_mode: 'sliding',
+      // statusbar: false,
+      // menubar:false,
+      // visual: false,
+      // inline_boundaries: false,
+      // plugins: 'lists checklist',
+//   toolbar: 'checklist',
+//   height: 250,
+//   menu: {
+//     format: {
+//       title: 'Format',
+//       items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+//     }
+//   },
+//   content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+   //  });
+
+   
+tinymce.init({
+  selector: 'textarea#notes',
+  plugins: 'lists checklist anchor autolink charmap codesample link lists searchreplace table visualblocks wordcount contextmenu',
+  toolbar: 'checklist undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table | align lineheight | numlist bullist indent outdent | charmap | removeformat',
+  height: 250,
+  menu: {
+    format: {
+      title: 'Format',
+      items: 'checklist | bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align | forecolor backcolor | removeformat'
+    }
+  },
+  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+  width: "100%",
       height: 500,
       toolbar_mode: 'sliding',
       statusbar: false,
-      // toolbar: false,
       menubar:false,
       visual: false,
-      inline_boundaries: false,
-    });
+      inline_boundaries: false
+});
+
 
     function Note_Members() {
   var selected = [];
@@ -1531,6 +1395,14 @@ console.log("aID:", aID);   // Output: 456
 $('#note_AddTeamMemberForm').on('submit',function(event){
          //  debugger;          
           event.preventDefault(); // Stop page from refreshing
+
+           // Check if at least one checkbox is checked
+  if (!$('#write').prop('checked') && !$('#read').prop('checked')) {
+   //  alert('Please check at least one checkbox.');
+    $('#checkboxErr').text('Please check at least one checkbox.')
+    return; // Do not submit the form
+  }
+
           $('#note_AddTeamMemberButton').hide();
           $('#loader2').css('visibility', 'visible');
          var formData = new FormData(this); 
@@ -1542,7 +1414,6 @@ $('#note_AddTeamMemberForm').on('submit',function(event){
                processData:false,
                cache:true,
                success: function(data){
-                  console.log(data.status);
                 if (data.status == false)
                 {
                   //show errors
@@ -1556,30 +1427,13 @@ $('#note_AddTeamMemberForm').on('submit',function(event){
                   $('#note_AddTeamMemberButton').show();
                   $('#loader2').css('visibility','hidden'); 
                 }
-                else if(data.status == 'Empty_TMember')
+                else if(data.status == 'Empty_NMember')
                 {
                    $('#selected_T_memberErr').html('Please select Team Member!');
                    $('#note_AddTeamMemberButton').show();
                    $('#loader2').css('visibility', 'hidden');
                 }
-                else if(data.status == 'Invited_email')
-                {
-                  $('#imemailErr').html('Already Invited!');  
-                  $('#note_AddTeamMemberButton').show();
-                  $('#loader2').css('visibility','hidden');           
-                }
-                else if(data.status == 'registered_email')
-                {
-                  $('#imemailErr').html('Project Team Member Request sent or Added in Team!');  
-                  $('#note_AddTeamMemberButton').show();
-                  $('#loader2').css('visibility','hidden');           
-                }
-                else if(data.status == 'err_valid')
-                {
-                  $('#err_valid').html('Project Owner cannot be added as Team Member!');    
-                  $('#note_AddTeamMemberButton').show();
-                  $('#loader2').css('visibility','hidden');         
-                }
+                
                 else if(data.status == true){
                  window.location.reload();
                 }

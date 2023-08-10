@@ -68615,7 +68615,7 @@ public function generate_userreport()
   $start_user = $this->input->post('daterangestart_user'); 
   $end_user = $this->input->post('daterangeend_user'); 
   $report_for_user = $this->input->post('report_for_user'); 
-
+ 
   $data = array(
    'name' => $template_user ,
    'user_id' => $this->session->userdata('d168_id'),        
@@ -68677,6 +68677,8 @@ public function pdfUserRepExport()
         return [$a_user, $b_user, $c_user];
     }, $your_array_user, $myArray_user, $selectedChartCat_user);
 
+
+    
     $logo_footer_user = 'assets/images/dark-logo-main.png';
     // $logo_data_from_db
     if ($pimage_user) {
@@ -68933,7 +68935,20 @@ public function pdfUserRepExport()
             $result_user = array_map(function ($a_user, $b_user, $c_user) {
               return [$a_user, $b_user, $c_user];
           }, $your_array_user, $myArray_user, $selectedChartCat_user);
-     
+          
+      // print_r($your_array_user);
+      // print_r($myArray_user);
+      // print_r($selectedChartCat_user);
+      // print_r($pname_user);
+      // print_r($pimage_user);
+      // print_r($template_user);
+      // print_r($start_user);
+      // print_r($end_user);
+      // print_r($date_user);
+      // print_r($report_for_user);
+      print_r($result_user);
+      die();
+
       $logo_footer_user = 'assets/images/dark-logo-main.png';
       // $logo_data_from_db
       if ($pimage_user) {
@@ -72495,15 +72510,59 @@ public function downloadUserReport()
  
      $text = $this->input->post('text');
  
-     $words = [];
- preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
- 
- if (isset($matches[0])) {
-   $words = $matches[0]; // Get the matched words
- }
- 
- $title = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
- 
+   
+      // Create a DOMDocument instance and load the HTML string
+      $dom = new DOMDocument();
+      @$dom->loadHTML($text);
+
+      // Find all the <td> elements
+      $tdElements = $dom->getElementsByTagName('td');
+      $liElements2 = $dom->getElementsByTagName('li');
+      $pElements = $dom->getElementsByTagName('p');
+      if ($tdElements->length > 0) {
+          // If there are <td> elements, extract the content inside each <td> element
+          $tdContent = [];
+          foreach ($tdElements as $td) {
+              $tdContent[] = $td->textContent;
+          }
+          // Combine the <td> content into a single string
+          $combinedString = implode(' ', $tdContent);
+        } else if ($liElements2->length > 0) {
+          // If there are no <td> elements, extract the content inside <li> elements
+          
+          $liContent = [];
+          foreach ($liElements2 as $li) {
+              $liContent[] = $li->textContent;
+          }
+          // Combine the <li> content into a single string
+          $combinedString = implode(' ', $liContent);
+        }
+      else if ($pElements->length > 0) {
+        // If there are no <td> elements, check for <p> elements with inline styles
+        $pElements = $dom->getElementsByTagName('p');
+        $pContent = [];
+        foreach ($pElements as $p) {
+            $pContent[] = $p->textContent;
+        }
+        // Combine the <p> content into a single string
+        $combinedString = implode(' ', $pContent);
+
+      }
+      else{
+        $words = [];
+          preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
+          
+          if (isset($matches[0])) {
+            $words = $matches[0]; // Get the matched words
+          }
+      
+          $combinedString = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
+      }
+      $noExtraSpacesString = preg_replace('/\s+/', ' ', trim($combinedString));
+
+      $title = trim($noExtraSpacesString);
+
+
      $data = array(
        'port_id' => $_COOKIE["d168_selectedportfolio"],
        'user_id' => $this->session->userdata('d168_id'),
@@ -72526,41 +72585,11 @@ public function downloadUserReport()
  public function store_duplicate_note()
    {
  
-    //  $this->form_validation->set_rules('text','Notes','trim|required');
-     
-    //  if ($this->form_validation->run() == FALSE)
-    //  {
-    //      //$errors = array();
-    //      $errors = $this->form_validation->error_array();
-    //      // Loop through $_POST and get the keys
-    //      foreach ($errors as $key => $value)
-    //      {
-    //        // Add the error message for this field
-    //        $errors[$key] = form_error($key);
-    //      }
-       
-    //      $response['errors'] = array_filter($errors); // Some might be empty
-    //      $response['status'] = FALSE;
-    //      // You can use the Output class here too
-    //      header('Content-type: application/json');
-    //      exit(json_encode($response));
-    //  }
-    //  else
-    //  {
- 
+
      $text = $this->input->post('text');
      $text2 = $this->input->post('title');
- 
-     $words = [];
- preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
- 
- if (isset($matches[0])) {
-   $words = $matches[0]; // Get the matched words
- }
- 
- $title = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
- 
- $title = $text2.'[copy]';
+    
+    $title = $text2;
      $data = array(
        'port_id' => $_COOKIE["d168_selectedportfolio"],
        'user_id' => $this->session->userdata('d168_id'),
@@ -72574,13 +72603,10 @@ public function downloadUserReport()
  
          $response['status'] = TRUE;
          $response['id'] = $lastInsertedId;
-         // $response['title'] = $title;
          // You can use the Output class here too
          header('Content-type: application/json');
-         //echo json_encode($response);
          exit(json_encode($response));
  
-  //  }
  }
 
  public function updateNote()
@@ -72611,22 +72637,60 @@ public function downloadUserReport()
  
    $text = $this->input->post('text');
  
-   // $title = implode(' ', array_slice(str_word_count($text, 2), 1, 3));
+     // Create a DOMDocument instance and load the HTML string
+     $dom = new DOMDocument();
+     @$dom->loadHTML($text);
+
+     // Find all the <td> elements
+     $tdElements = $dom->getElementsByTagName('td');
+     $liElements2 = $dom->getElementsByTagName('li');
+     $pElements = $dom->getElementsByTagName('p');
+     if ($tdElements->length > 0) {
+         // If there are <td> elements, extract the content inside each <td> element
+         $tdContent = [];
+         foreach ($tdElements as $td) {
+             $tdContent[] = $td->textContent;
+         }
+         // Combine the <td> content into a single string
+         $combinedString = implode(' ', $tdContent);
+       } else if ($liElements2->length > 0) {
+         // If there are no <td> elements, extract the content inside <li> elements
+         
+         $liContent = [];
+         foreach ($liElements2 as $li) {
+             $liContent[] = $li->textContent;
+         }
+         // Combine the <li> content into a single string
+         $combinedString = implode(' ', $liContent);
+       }
+     else if ($pElements->length > 0) {
+       // If there are no <td> elements, check for <p> elements with inline styles
+       $pElements = $dom->getElementsByTagName('p');
+       $pContent = [];
+       foreach ($pElements as $p) {
+           $pContent[] = $p->textContent;
+       }
+       // Combine the <p> content into a single string
+       $combinedString = implode(' ', $pContent);
+
+     }
+     else{
+       $words = [];
+         preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
+         
+         if (isset($matches[0])) {
+           $words = $matches[0]; // Get the matched words
+         }
+     
+         $combinedString = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
+     }
+     $noExtraSpacesString = preg_replace('/\s+/', ' ', trim($combinedString));
+
+     $title = trim($noExtraSpacesString);
  
-   $words = [];
-   preg_match_all('/\b[\w\d]+\b/', $text, $matches); // Extract all words containing alphanumeric characters
-   
-   if (isset($matches[0])) {
-     $words = $matches[0]; // Get the matched words
-   }
-   
-   $title = implode(' ', array_slice($words, 1, 3)); // Extract the first three words
- 
-   // $title = $this->input->post('title');
    $id = $this->input->post('id');
    $data = array(
      'port_id' => $_COOKIE["d168_selectedportfolio"],
-    //  'user_id' => $this->session->userdata('d168_id'),
      'title' => $title,
      'content' => $text,
    );
@@ -72642,34 +72706,70 @@ public function downloadUserReport()
  }
  }
  
- public function get_note_mem()
-   {
+//  public function get_note_mem()
+//    {
 
-    if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
-     {
+//     if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+//      {
  
-       if(isset($_COOKIE["d168_selectedportfolio"]))
-       {
-         $id = $this->input->post('id');
-         $cid = $_COOKIE["d168_selectedportfolio"];
-        //  $data = $this->Front_model->getNotesById($id); 
-         $data = $this->Front_model->check_nm($cid,$id);
-        // print_r($data);
-         echo json_encode($data);
+//        if(isset($_COOKIE["d168_selectedportfolio"]))
+//        {
+//          $id = $this->input->post('id');
+//          $cid = $_COOKIE["d168_selectedportfolio"];
+//          $data = $this->Front_model->check_nm($cid,$id);
+//          echo json_encode($data);
  
          
-       }
-     }
-     else
-     {
-       redirect(base_url('login'));
-     }
+//        }
+//      }
+//      else
+//      {
+//        redirect(base_url('login'));
+//      }
 
-   }
+//    }
+
+public function get_noteMem()
+  {
+    if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+    {
+    $note_id = $this->input->post('note_id');
+    $cid = $_COOKIE["d168_selectedportfolio"];
+    $porttm = $this->Front_model->getAccepted_PortTM($_COOKIE["d168_selectedportfolio"]);
+      $check_nmem = "";
+      $check_nm = "";
+     
+    foreach($porttm as $ntm){
+      $nm = $ntm->sent_to;
+      $m = $this->Front_model->selectLogin($nm);
+      $mn =$m->reg_id;
+
+      if($m){
+         $check_nm = $this->Front_model->check_nmember($cid,$note_id,$mn);
+        if($check_nm)
+        {
+           $check_nmem = $check_nm->nmember;
+        }
+     if($mn != $this->session->userdata('d168_id'))
+        {
+          if($mn != $check_nmem){
+      ?>
+      <option value="<?php echo $mn;?>"><span><?php echo $m->first_name." ".$m->last_name; ?></span></option>
+      <?php
+        }
+      }
+      }
+      }
+    
+    }
+    else
+    {
+      redirect(base_url('login'));
+    } 
+  }
+
  public function get_note()
    {
-    // echo 'dasd';
-    // die();
      if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
      {
  
@@ -72711,7 +72811,8 @@ public function downloadUserReport()
           $notesdetail = $this->Front_model->getNotesById2($nid);
           // print_r($notesdetail['port_id']);
           $noteArray = explode(',', $this->input->post('selected_note_mem'));//team member array
-
+          $student_id = $this->session->userdata('d168_id');
+          $P_Owner = $this->Front_model->getStudentById($student_id);
           if((!empty($noteArray[0])))
           {
 
@@ -72738,40 +72839,150 @@ public function downloadUserReport()
                       // 
                       $this->Front_model->insert_notemember($data_note);
                       $inserted_nm_id = $this->db->insert_id();
+                        $getEmailID = $this->Front_model->getEmailID($n);
 
-                      // $data = array(
-                      //   'port_id' => $_COOKIE["d168_selectedportfolio"],
-                      //   'user_id' => $this->session->userdata('d168_id'),
-                      //   'title' => $title,
-                      //   'content' => $text,
-                      // );
-                      // $data = $this->security->xss_clean($data); // xss filter
-                      // $this->Front_model->insert_note($data);
+                        $getnote_portfolio_name = "";
+  $checknote_portfolio_name = $this->Front_model->getPortfolioName($notesdetail->port_id);
+  if($checknote_portfolio_name)
+  {
+    if($checknote_portfolio_name->portfolio_user == 'company')
+    { 
+      $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
+    }
+    elseif($checknote_portfolio_name->portfolio_user == 'individual')
+    { 
+      $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name.' '.$checknote_portfolio_name->portfolio_lname;
+    }
+    else
+    { 
+      $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
+    }
+  }
 
-//                       $getEmailID = $this->Front_model->getEmailID($n);
-
-//                       $getnote_portfolio_name = "";
-// $checknote_portfolio_name = $this->Front_model->getPortfolioName($notesdetail->port_id);
-// if($checknote_portfolio_name)
-// {
-//   if($checknote_portfolio_name->portfolio_user == 'company')
-//   { 
-//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
-//   }
-//   elseif($checknote_portfolio_name->portfolio_user == 'individual')
-//   { 
-//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name.' '.$checknote_portfolio_name->portfolio_lname;
-//   }
-//   else
-//   { 
-//     $getnote_portfolio_name = $checknote_portfolio_name->portfolio_name;
-//   }
-// }
-
-// $RequestEmailID = $getEmailID->email_address;
+  $RequestEmailID = $getEmailID->email_address;
 
 
+  $email_to = $RequestEmailID;
+  $email_from = 'hello@decision168.com'; 
+  $email_name = 'Decision 168';
 
+  $this->load->library('email');  
+  $config=array(
+    'charset'=>'utf-8',
+    'wordwrap'=> TRUE,
+    'mailtype' => 'html'
+    );
+  $this->email->initialize($config);
+  $this->email->from($email_from, $email_name);
+  $this->email->set_header('Reply-To', $email_from."\r\n");
+  $this->email->set_header('Return-Path', $email_from."\r\n");
+  $this->email->set_header('X-Mailer', 'PHP/' . phpversion().'\r\n');
+  $this->email->set_header('MIME-Version', '1.0' . "\r\n");
+  $this->email->to($email_to);
+  $this->email->set_mailtype('html');
+  $this->email->subject('Project Request | Decision 168');
+  $this->email->message('                 
+      <!doctype html>
+<html lang="en-US">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Project Request</title>
+<meta name="description" content="Project Request">
+<style type="text/css">
+a:hover {text-decoration: underline !important;pointer:cursor !important;}
+</style>
+</head>
+
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #f2f3f8;" leftmargin="0">
+<!--100% body table-->
+
+<table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
+style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,500,700|Open+Sans:300,400,600,700); font-family: Open Sans, sans-serif;">
+<tr>
+<td>
+<table style="background-color: #f2f3f8; max-width:670px;  margin:0 auto;" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+<tr>
+<td style="height:80px;">&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+<a href="'.base_url().'" title="Decision 168" target="_blank">
+<img width="50%" src="'.base_url("assets/images/dark-logo-main.png").'" title="Decision 168" alt="Decision 168">
+</a>
+</td>
+</tr>
+<tr>
+<td style="height:20px;">&nbsp;</td>
+</tr>
+<tr>
+<td>
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
+    style="max-width:670px;background:#383838;border:4px solid #dfdddd;text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+    <tr>
+        <td style="height:40px;">&nbsp;</td>
+    </tr>
+    <tr>
+        <td style="padding:0 35px;">
+            <h1 style="color:#c7df19; font-weight:600; margin:0;font-size:33px;font-family:Rubik,sans-serif;">You\'re invited to a Note...</h1>
+            <span
+                style="display:inline-block; vertical-align:middle; margin:29px 0 29px; border-bottom:2px solid #cecece; width:270px;"></span>
+            <p style="color:#fff; font-size:15px;line-height:24px;text-align:left; margin:0;">
+            Hello '.ucfirst($getEmailID->first_name).',<br><br>
+               '.ucfirst($P_Owner->first_name).' '.ucfirst($P_Owner->last_name).' has requested you to join note '.$notesdetail->title.' as a  member. Just click the appropriate button below to join the note or request more information.
+                <br><br>
+                Portfolio: '.$getnote_portfolio_name.'
+                <br><br>
+                Project Short Description: '.substr($notesdetail->content,0,100).'...
+                <br><br>
+            </p>
+            <a href="'.base_url('project-request/'.$nid.'/'.trim($n).'/'.$inserted_nm_id.'/'.'1').'"
+            style="background:#c7df19;text-decoration:none !important; font-weight:600; margin:20px; color:#fff;border:4px solid #c7df19;text-transform:uppercase; font-size:15px;padding:10px 30px;display:inline-block;border-radius:10px;">Join Project</a>
+            <a href="'.base_url('project-request/'.$nid.'/'.trim($n).'/'.$inserted_nm_id.'/'.'2').'"
+                style="text-decoration:none !important; font-weight:600; margin:20px; color:#c7df19;border:4px solid #c7df19;text-transform:uppercase; font-size:15px;padding:10px 30px;display:inline-block;border-radius:10px;">Need More Info</a> 
+                <br><br>
+                <p style="color:#fff; font-size:15px;line-height:24px;text-align:left; margin:0;">
+                Note: If you do not have an account, you will need to register for one and create profile (don\'t worry it only takes a couple of minutes).
+                <br><br>
+                Thanks,
+                <br>
+                The <span style="color:#c7df19;font-weight: 600;">Decision 168</span> Team
+                </p>
+                <p style="color:#fff; font-size:15px;line-height:24px;text-align:right; margin:0;">
+                <br>
+                <img width="20%" src="'.base_url("assets/images/Decision-168.png").'" title="Decision 168" alt="Decision 168">
+                </p>
+        </td>
+    </tr>
+    <tr>
+        <td style="height:40px;">&nbsp;</td>
+    </tr>
+</table>
+</td>
+<tr>
+<td style="height:20px;">&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+<p style="color:rgba(69, 80, 86, 0.7411764705882353);font-size:11px;line-height:15px;margin:0;">Please note: This e-mail was sent from an auto-notification system that cannot accept incoming e-mail. Do not reply to this message.</p>
+<p style="color:rgba(69, 80, 86, 0.7411764705882353);font-size:11px;line-height:15px;margin:0;">You can’t unsubscribe from important emails about your account like this one.</p>
+<br>
+<p style="font-size:14px; color:#6b6e70; line-height:18px; margin:0 0 0;">&copy; <strong>Copyright 2013 – '.date("Y").'  |  Decision 168, Inc  |  All Rights Reserved </strong></p>
+</td>
+</tr>
+<tr>
+<td style="height:80px;">&nbsp;</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<!--/100% body table-->
+</body>
+
+</html>' 
+                  );
+  $this->email->send();
                       }
                   }
             }
@@ -72825,7 +73036,74 @@ public function downloadUserReport()
     } 
   }
 
+  
+
+
    // Notes work end
 
+   public function eventMeeting()
+   {
+    //  if(($this->session->userdata('d168_id')) || ($this->session->userdata('d168_id') != ""))
+    //  {
+ 
+      //  if(isset($_COOKIE["d168_selectedportfolio"]))
+      //  {
+       
+        $meet_id = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        $meeting = $this->Front_model->callByMeet($meet_id);
+
+        $mt_id = $meeting->id;    
+        // $min_del = $this->Front_model->evt_meeting_mem($this->session->userdata('d168_id'),$mt_id);
+        $event_start = $meeting->event_start_date.' '.$meeting->event_start_time;
+        $event_end = $meeting->event_end_date.' '.$meeting->event_end_time;
+          // if($min_del){
+          //   $min_delmem = $min_del->member;
+          // }
+          // else{
+          //   $min_delmem = '0';
+          // }
+       
+
+        // if($meeting->student_id == $this->session->userdata('d168_id') || $min_delmem == $this->session->userdata('d168_id')){
+           // Current time
+        $currentDateTime = new DateTime();
+        // Given times
+        $startTime1 = new DateTime($event_start);
+        $endTime1 = new DateTime($event_end);
+
+        // Check if current time is between the first set of times
+        $isBetween1 = $currentDateTime >= $startTime1 && $currentDateTime <= $endTime1;
+
+        // Check if the first and second times are the same
+        $isSameTime = $startTime1 == $endTime1;
+
+        // If the first and second times are the same, check if the current time matches the first time
+        $isSameTimeAndCurrentTimeMatches = $isSameTime && $currentDateTime == $startTime1;
+
+        if ($isBetween1 || $isSameTimeAndCurrentTimeMatches) {
+            // echo "Current time is between or matches the first set of times.";
+          $this->load->view('user/meeting');
+           
+        } else {
+            // echo "Current time is NOT between the first set of times.";
+          $data['result'] = 'Event is over.';
+          $this->load->view('user/invalid_session',$data);
+        }
+
+        // }
+        // else {
+        //   $data['result'] = 'Invalid Link';
+        //   $this->load->view('user/invalid_session',$data);
+        // }
+
+      //  }
+    //  }
+    //  else
+    //  {
+    //    redirect(base_url('login'));
+    //  }
+   }
+
+  
 }
 ?>

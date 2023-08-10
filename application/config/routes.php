@@ -187,6 +187,8 @@ $route['goal-overview-request/(:num)'] = 'front/goal_overview_request';
 $route['preview-permission-request/(:num)/(:num)']	= 'front/preview_permission_request';
 $route['preview-permission-request2/(:num)/(:num)']	= 'front/preview_permission_request2';
 $route['notes-list'] = 'front/notesList';
+$route['meeting/(:any)'] = 'front/eventMeeting/$1';
+
 
 // Expert panel	
 $route['community'] = 'front/community';	

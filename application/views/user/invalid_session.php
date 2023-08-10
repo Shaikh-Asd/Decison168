@@ -41,7 +41,22 @@ include('header_links.php');
                                                                 </center>
                                                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                                                     <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">
-                                                                        <h5>Invalid Session Link</h5>
+                                                                        
+                                                                        <?php
+                                                                            $meet_id = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                                                            $parts = explode('/', $meet_id);
+                                                                            $link_path = $parts[4]; // The third element contains "video-session
+
+                                                                            if($link_path == 'video-session'){
+                                                                        ?>
+                                                                                <h5>Invalid Session Link</h5>
+                                                                            <?php
+                                                                            }else{
+                                                                            ?>
+                                                                                <h5><?php echo $result?></h5>
+                                                                            <?php
+                                                                            }
+                                                                            ?>
                                                                     </td>
                                                                 </tr>
                                                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">

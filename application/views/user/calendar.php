@@ -694,11 +694,16 @@ include('header_links.php');
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-append">
-                                      <span class="input-group-text cus_textbox_icon"><i class="fa fa-external-link-alt"></i></span>
+                                      <span class="input-group-text cus_textbox_icon"><i class="far fa-copy" onclick="copyFunction()"></i></span>
                                     </div>
                                     <input class="form-control form-white" placeholder="Meeting Link" type="url" name="meeting_link" id="meeting_link"/>
                                 </div>
-                                <span id="meeting_linkErr" class="text-danger"></span>
+                                <span id="meeting_linkErr" class="text-danger"></span>                                
+                            </div>
+                            <div style="margin-top: 10px">
+                            <input type="checkbox" name="own_meet" id="own_meet" class="form-check-input" onclick="return ownMeet()">
+                                <label class="control-label" for="own_meet">Create Own Link</label>
+                                <input type="hidden" name="meet_value_get" id="meet_value_get" value="true" >
                             </div>
                         </div>
                     </div>
@@ -1314,11 +1319,16 @@ include('header_links.php');
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-append">
-                                      <span class="input-group-text cus_textbox_icon"><i class="fa fa-external-link-alt"></i></span>
+                                      <span class="input-group-text cus_textbox_icon"><i class="far fa-copy" onclick="copyFunction()"></i></span>
                                     </div>
                                     <input class="form-control form-white" placeholder="Meeting Link" type="url" name="meeting_link" id="meeting_link_up" />
                                 </div>
                                 <span id="meeting_linkErr" class="text-danger"></span>
+                            </div>
+                            <div style="margin-top: 10px">
+                            <input type="checkbox" name="own_meet" id="own_meet" class="form-check-input" onclick="return ownMeet()">
+                                <label class="control-label" for="own_meet">Create Own Link</label>
+                                <input type="hidden" name="meet_value_get" id="meet_value_get" value="true" >
                             </div>
                         </div>
                     </div>
@@ -2258,6 +2268,36 @@ $("#open_quoteModal").on('click', function () {
   $('#quoteModal').removeClass('hidden');
 });
 
+    // Function to select own link 
+
+function ownMeet(){  
+    // debugger;   
+        var check_new_value = $('#meet_value_get').val();
+        var meeting_link = $('#meeting_link').val();
+        if(check_new_value == 'true'){
+            $('#meeting_link').val(" ");
+            $('#meet_value_get').val("false");
+        }else{
+            var meetingId = generateMeetingId();
+        document.getElementById("meeting_link").value = base_url + "meeting/"+ meetingId;
+            $('#meet_value_get').val("true");
+
+        }
+    }
+
+    // Function to copy the link
+    function copyFunction() {
+    // debugger;   
+      /* Get the text field */
+      var copyText = document.getElementById("meeting_link");
+
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+      /* Copy the text inside the text field */
+      navigator.clipboard.writeText(copyText.value);
+    }
 
 //motivator read more option
 function motivator_readMore(i) {
@@ -2642,6 +2682,7 @@ function showPriority(i){
         $('#meeting_sec_div2').hide();
         // $('#meeting_link').prop('required', false);
     }
+
     function event_type_meeting(){
         $('#created_type_event').prop('checked', false);
         $('#created_type_task').prop('checked', false);
@@ -2652,7 +2693,50 @@ function showPriority(i){
         $('#meeting_sec_div').show();
         $('#meeting_sec_div2').show();
         // $('#meeting_link').prop('required', true);
+        // createMeeting();
+        // generateMeetingId();
+        var meetingId = generateMeetingId();
+        document.getElementById("meeting_link").value = base_url + "meeting/"+ meetingId;
+
     }
+
+    
+
+    function generateMeetingId() {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    let meetingId = '';
+
+    // Generate random characters in the format 'xxx-xxx-xxx'
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+        const randomIndex = Math.floor(Math.random() * alphabet.length);
+        meetingId += alphabet[randomIndex];
+        }
+        if (i < 2) {
+        meetingId += '-';
+        }
+    } 
+    // Append the current date and time in the format 'DDHHmmss'
+    const now = new Date();
+    const dateStr = now.toISOString().replace(/[-:.T]/g, '').slice(6, 14);
+    meetingId += '-' + dateStr;
+
+    return meetingId;
+    }
+
+
+    // function createMeeting() {
+    //     let meetingId =  'xxxxyxxx'.replace(/[xy]/g, function(c) {
+    //         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    //         return v.toString(16);
+    //     });
+        
+    //     // let meetingId = 'xxxxxxxxxxxx'.replace(/[x]/g, function() {
+    //     //     return (Math.floor(Math.random() * 16)).toString(16);
+    //     //     });
+    //     document.getElementById("meeting_link").value = "http://"+ window.location.host + "/meeting/"+ meetingId;
+    // }
+
     function customChange(){
         //console.log("customChangeFunction");
         //debugger;

@@ -14900,7 +14900,6 @@ function checkUserReportTemplate($id)
 	// request to preview files if view only selected in role
 	
    // Notes work start
-
    function insert_note($data)
    {
 	   if($this->db->insert('notes',$data))
@@ -14916,15 +14915,14 @@ function checkUserReportTemplate($id)
    function getNotesMem($id)
    {
 
-		$this->db->order_by('p.port_id', 'DESC');	
+		$this->db->order_by('p.updated_at', 'DESC');		
 		$this->db->group_start();	
 		$this->db->group_start();	
 		$this->db->where('pm.nmember', $this->session->userdata('d168_id'));	
 		$this->db->where('pm.reg_acc_status !=','deactivated');	
-		$this->db->where('pm.status', 'send');	
 		$this->db->group_end();	
 		$this->db->or_where('p.user_id', $this->session->userdata('d168_id'));	
-		$this->db->group_end();	
+		$this->db->group_end();
 		$this->db->where('p.port_id', $id);	
 		$this->db->where('p.ntrash !=', 'yes');	
 		$this->db->where('p.note_archive !=', 'yes');	
@@ -14933,10 +14931,22 @@ function checkUserReportTemplate($id)
         $this->db->from('notes as p');	
         $this->db->join('notes_members as pm','pm.nid = p.id', 'left');	
         $query = $this->db->get();
-		// echo $this->db->last_query();	
-        return $query->result();    
-   }
+		
+		$result = $query->result();
+		$combinedResult = array();
+		foreach ($result as $row) {
+			$pid = $row->pid;
+			if (!isset($combinedResult[$pid])) {
+				$combinedResult[$pid] = $row;
+			} else {
+				// Combine the data from both rows as needed
+				// For example, you could merge additional attributes
+				// or perform any other required actions.
+			}
+		}
 
+		return array_values($combinedResult); // Re-index the array keys
+   	}
 
    function getNotes($id)
    {
@@ -14988,9 +14998,7 @@ function checkUserReportTemplate($id)
 	   }
    }
    function deleteMultipleNote($ids)
-   {
-	//    $idList = explode(',', $ids); // Convert the comma-separated string back to an array
-	   
+   {	   
 	   $this->db->where_in('id', $ids);
 	   $this->db->delete('notes');
 	   
@@ -15032,21 +15040,7 @@ function checkUserReportTemplate($id)
     {
     	$this->db->where('reg_acc_status !=','deactivated');
     	$this->db->where('portfolio_id',$port_id);
-    	// $this->db->where('nid','2');
-    	// $this->db->where('nmember',$this->session->userdata('d168_id'));
-
-		// $this->db->group_start();	
-		// $this->db->where('ncreated_by',$this->session->userdata('d168_id'));
-		// $this->db->or_where('nmember',$this->session->userdata('d168_id'));
-		// $this->db->group_end();
-
-		// $this->db->group_start();
-		// $this->db->where('nmember',$this->session->userdata('d168_id'));
-
-		$this->db->where('nmember',$this->session->userdata('d168_id'));
-		// $this->db->group_end();
-
-    	// $this->db->where('pid',$pid);
+    	$this->db->where('nmember',$this->session->userdata('d168_id'));
     	$query = $this->db->get('notes_members');
     	return $query->row();
     }
@@ -15091,7 +15085,36 @@ function checkUserReportTemplate($id)
         return $query->result();
     }
 
+function check_nmember($port_id,$id,$nm)
+    {
+    	// $this->db->where('reg_acc_status !=','deactivated');
+    	$this->db->where('portfolio_id',$port_id);
+    	$this->db->where('nmember',$nm);
+    	$this->db->where('nid',$id);
+    	$query = $this->db->get('notes_members');
+    	return $query->row();
+    }
+
   // Notes work end
+
+  function callByMeet($mid)
+	{
+		$this->db->where('meeting_link', $mid);
+		$query = $this->db->get('events');
+		return $query->row();
+	}
+
+	function evt_meeting_mem($reg_id,$event_id)
+    {
+			$this->db->select('em.*');
+			$this->db->from('events_meeting AS em');
+			$this->db->join('events AS e', 'e.id = em.event_id', 'left');
+			$this->db->where('(em.status = "accepted" AND em.member = ' . $reg_id . ') OR (em.status = "invited" AND e.student_id = ' . $reg_id . ')');
+			$this->db->where('em.event_id', $event_id);
+			$query = $this->db->get();
+			return $query->row();		
+    }
+
 
 }
 /* End of file Front_model.php */

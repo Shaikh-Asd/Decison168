@@ -6,7 +6,8 @@
         
 <script src="<?php echo base_url('assets/js/front.js');?>"></script>
 <script src="<?php echo base_url();?>assets/js/function.js"></script>
-<script src="<?php echo base_url();?>assets/libs/tinymce_notes/js/tinymce/tinymce.min.js"></script>
+<!-- <script src="<?php echo base_url();?>assets/libs/tinymce_notes/js/tinymce/tinymce.min.js"></script> -->
+<!-- <script src="https://cdn.tiny.cloud/1/qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc/tinymce/5-stable/tinymce.min.js"></script> -->
 
 <script src="<?php echo base_url();?>assets/tour/js/bs5-intro-tour.js"></script>
     <style> 
