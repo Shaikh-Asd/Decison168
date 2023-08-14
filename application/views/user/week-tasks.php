@@ -840,6 +840,8 @@ if($privilege_only_view == 'no')
             <?php } echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+          <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -889,7 +891,10 @@ if($privilege_only_view == 'no')
         </span>
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
-
+                
+ <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -1204,6 +1209,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                               <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -1259,7 +1266,9 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                         <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">
@@ -1830,6 +1839,8 @@ if($privilege_only_view == 'no')
             <?php } echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+           <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -1880,6 +1891,9 @@ if($privilege_only_view == 'no')
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
 
+ <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -2194,6 +2208,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                              <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -2249,7 +2265,9 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                        <?php } else { ?>
+                                                        <span>NA</span>
+                                                      <?php } ?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">
@@ -2833,6 +2851,8 @@ if($privilege_only_view == 'no')
              echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+           <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -2882,7 +2902,9 @@ if($privilege_only_view == 'no')
         </span>
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
-
+                <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -3234,6 +3256,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                              <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -3289,7 +3313,9 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                         <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">
@@ -3855,6 +3881,8 @@ if($privilege_only_view == 'no')
              echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+            <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -3904,7 +3932,9 @@ if($privilege_only_view == 'no')
         </span>
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
-
+                 <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -4256,6 +4286,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                               <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -4311,7 +4343,9 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                         <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">
@@ -4881,6 +4915,8 @@ if($privilege_only_view == 'no')
              echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+            <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -4930,7 +4966,9 @@ if($privilege_only_view == 'no')
         </span>
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
-
+                 <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -5282,6 +5320,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                               <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -5337,7 +5377,10 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                         
+ <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">
@@ -5903,6 +5946,8 @@ if($privilege_only_view == 'no')
              echo $atl->tcode;?>
         </div>
         <div class="col-lg">
+           <?php 
+            if($atl->estimated_time){ ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
         <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
         <?php
@@ -5952,7 +5997,9 @@ if($privilege_only_view == 'no')
         </span>
             <!-- <div id="" style="margin-left: 5px;font-size: 20px; margin-top: 2px;"><i class="bx bx-reset" onclick="toggleStop('<?php echo $tdetail->tid;?>');"></i></div> -->
             <input type="hidden" value="<?php echo $atl->flag?>" id="timer_flag_<?php echo $atl->flag?>">
-
+                 <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
         </div>
         <div class="col-lg">
             <fieldset class="description">
@@ -6304,6 +6351,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                               <?php 
+            if($l_subtask->estimated_stime){ ?>
                             <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -6359,7 +6408,10 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
+                                         
+ <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                             </div>
                             <div class="col-lg">
                                 <fieldset class="description">

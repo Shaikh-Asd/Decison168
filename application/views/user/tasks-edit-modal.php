@@ -202,7 +202,23 @@ if($tdetail)
                                                     }
                                                     else
                                                     {
+
+                                                        if($tdetail->estimated_time){
+                                                            $time_in = 'block';
+                                                            $checked = 'checked';
+                                                            $val = 'false';
+                                                        }
+                                                        else{
+                                                            $time_in = 'none';
+                                                            $checked = '';
+                                                            $val = 'true';
+                                                            }
                                                     ?>
+                                                    <div style="margin-top: 10px; margin-left: 376px;" >
+                                                        <input type="checkbox" name="task_track" id="task_track" class="form-check-input" onclick="return taskTrack()" <?php echo $checked; ?>>
+                                                        <label class="control-label" for="task_track">Track your task</label>
+                                                        <input type="hidden" name="track_value_get" id="track_value_get" value="<?php echo $val; ?>" >
+                                                    </div>
                                                     <div class="mb-3 col-md-5">
                                                         <label class="col-form-label">Attached File(s)</label>
                                                         <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
@@ -211,10 +227,10 @@ if($tdetail)
                                                     <div class="mb-3 col-md-1">
 
                                                     </div>
-                                                    <div class="mb-3 col-md-6">
+                                                    <div class="mb-3 col-md-6" id="taskTrack" style="display:<?php echo $time_in; ?>">
                                                     <div class="form-group mb-2">
-                                                        <label for="estimated_time" class="col-form-label">Estimated Time <span class="text-danger">*</span> (For example: XhXm)</label>
-                                                        <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $tdetail->estimated_time;?>">
+                                                        <label for="estimated_time" class="col-form-label">Estimated Time  (For example: XhXm)</label>
+                                                        <input id="estimated_time" name="estimated_time" type="text" class="form-control" placeholder="Enter time in hour format"  value="<?php echo $tdetail->estimated_time;?>">
                                                         <div id="suggestionContainer"></div>    
 
                                                         <span id="estimated_timeErr" class="text-danger"></span>

@@ -660,6 +660,8 @@ if($privilege_only_view == 'no')
                                                         <button type="submit" class="btn btn-sm btn-d text-white"><i class="mdi mdi-plus"></i> Add Sub Task</button> 
                                                     </form>
                                                     <a href="<?php echo base_url("tasks-edit/".$tdetail->tid)?>" class="btn btn-sm btn-d text-white"><i class="mdi mdi-file-edit"></i> Edit Task</a>
+                                                         <?php 
+                                                    if($tdetail->estimated_time){ ?>
                                                     <input type="hidden" id="timer_flag_new_<?php echo $tdetail->tid;?>" value="<?php echo $tdetail->flag;?>">                   
                                                     <input type="hidden"  id="timer_started_<?php echo $tdetail->tid?>" value="<?php echo $tdetail->flag?>">
                                                     <span class="timerBtn_<?php echo $tdetail->tid;?>" style="margin-left: 25px;font-size: 20px; margin-top: 2px;"><i class="bx bx-play-circle timerBtn_<?php echo $tdetail->tid;?>" onclick="toggleTimer('<?php echo $tdetail->tid;?>');"></i></span>
@@ -711,8 +713,9 @@ if($privilege_only_view == 'no')
                                                     ?>
                                                 </span>
                                                     <input type="hidden" value="<?php echo $tdetail->flag?>" id="timer_flag_<?php echo $tdetail->tid;?>">
+                                                           
                                                     <?php
-}
+}}
                                                     $check_pro_createdby = "";
                                                         if(!empty($tdetail->tproject_assign))
                                                         {
@@ -1620,6 +1623,8 @@ if($privilege_only_view == 'no')
                                  echo $l_subtask->stcode;?>
                             </div>
                             <div class="col-lg">
+                                 <?php 
+            if($l_subtask->estimated_stime){ ?>
                                 <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
                                 <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
                             </span>
@@ -1674,9 +1679,11 @@ if($privilege_only_view == 'no')
                                 <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                 <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                 <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-
-                            </div>
-                            <div class="col-lg">
+<?php } else { ?>
+                        <span>NA</span>
+                    <?php } ?>
+                                                </div>
+                                                <div class="col-lg">
 <?php
 if($privilege_only_view == 'no')
 {

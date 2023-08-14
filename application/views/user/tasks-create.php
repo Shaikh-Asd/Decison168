@@ -405,7 +405,11 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
                                                             ?>
                                                             </select> 
                                                             <span id="team_member2Err" class="text-danger"></span>
-                                                            
+                                                             <div style="margin-top: 10px">
+                                                        <input type="checkbox" name="task_track" id="task_track" class="form-check-input" onclick="return taskTrack()">
+                                                        <label class="control-label" for="task_track">Track your task</label>
+                                                        <input type="hidden" name="track_value_get" id="track_value_get" value="true" >
+                                                    </div>
                                                        <!--  <?php
                                                             if($get_pdetail->pcreated_by == $this->session->userdata('d168_id'))
                                                             {
@@ -435,6 +439,11 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
                                                     }
                                                     ?>
                                                   </div>
+                                                   <div style="margin-top: 10px; margin-left: 605px;">
+                                                        <input type="checkbox" name="task_track" id="task_track" class="form-check-input" onclick="return taskTrack()">
+                                                        <label class="control-label" for="task_track">Track your task</label>
+                                                        <input type="hidden" name="track_value_get" id="track_value_get" value="true" >
+                                                    </div>
                                                   <div class="mb-3 col-md-5">
                                                         <label class="col-form-label">Attached File(s)</label>
                                                         <input class="form-control" name="tfile[]" id="tfile" type="file" multiple="" />
@@ -442,11 +451,12 @@ if(($this->session->flashdata('message')) && ($this->session->flashdata('message
                                                         
                                                     </div>
                                                   <div class="mb-3 col-md-1">
-
-                                                    </div>
-                                                    <div class="mb-3 col-md-6">
-                                                        <label class="col-form-label">Estimated Time<span class="text-danger">*</span> (For example: XhXm)</label>
-                                                        <input class="form-control" name="estimated_time" id="estimated_time" type="text" placeholder="Enter time in hour format" required />
+                                                     
+                                                  </div>
+                                                  
+                                                    <div class="mb-3 col-md-6" id="taskTrack"style="display:none">
+                                                        <label class="col-form-label">Estimated Time (For example: XhXm)</label>
+                                                        <input class="form-control" name="estimated_time" id="estimated_time" type="text" placeholder="Enter time in hour format" />
                                                             <div id="suggestionContainer"></div>    
                                                         <span id="estimated_timeErr" class="text-danger"></span>
                                                         

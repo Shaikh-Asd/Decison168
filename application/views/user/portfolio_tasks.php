@@ -447,6 +447,8 @@ if($portfolio_tasks)
         
 
         <div class="col-lg">
+                <?php
+                        if ($atl->estimated_time) { ?>
         <span class="timerBtn_<?php echo $atl->tid;?>"><?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerBtn_<?php echo $atl->tid;?>"  onclick="toggleTimer('<?php echo $atl->tid;?>');"></i><?php } ?></span>
                                                     <span class="counter_<?php echo $atl->tid;?> counter_task" data-id="<?php echo $atl->tid;?>">
                                                     <?php
@@ -500,7 +502,9 @@ if($portfolio_tasks)
                                                     <input type="hidden" id="timer_flag_poup_<?php echo $atl->tid;?>" value="">     
                                                     <input type="hidden"  id="timer_started_<?php echo $atl->tid?>" value="<?php echo $atl->flag?>">
                                                     <input type="hidden"  id="timer_started_popup_<?php echo $atl->tid?>" value="<?php echo $atl->flag?>">
-                                                    
+                                                             <?php } else{?>
+                  <span>NA</span>
+                  <?php }?>
                                                 </div>
         <div class="col-lg">
             <p><a href="javascript: void(0);" class="nameLink description-content" onclick="return TaskOverviewModal(<?php echo $atl->tid;?>)"><?php echo $atl->tname;?></a></p>
@@ -598,6 +602,8 @@ if($portfolio_tasks)
                           
 
         <div class="col-lg">
+            <?php 
+            if($l_subtask->estimated_stime){ ?>
         <span class="timerSBtn_<?php echo $l_subtask->stid;?>">
         <?php if($privilege_only_view == 'no') { ?><i class="bx bx-play-circle  timerSBtn_<?php echo $l_subtask->stid;?>"  onclick="SubtaskTimer('<?php echo $l_subtask->stid;?>');"></i><?php } ?>
     </span>
@@ -652,7 +658,9 @@ if($portfolio_tasks)
                                                     <input type="hidden" id="timer_sflag_poup_<?php echo $l_subtask->stid;?>" value="">     
                                                     <input type="hidden"  id="stimer_started_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
                                                     <input type="hidden"  id="stimer_started_popup_<?php echo $l_subtask->stid?>" value="<?php echo $l_subtask->sflag?>">
-              
+                                                            <?php } else { ?>
+                                                                                <span>NA</span>
+                                                                            <?php } ?>
                                                 </div>
                             <div class="col-lg">
                                 <p><a href="javascript: void(0);" class="nameLink description-content" onclick="return SubtaskOverviewModal(<?php echo $l_subtask->stid;?>)"><?php echo $l_subtask->stname;?></a></p>

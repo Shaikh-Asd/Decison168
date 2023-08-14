@@ -450,11 +450,14 @@ if($data_task->flag == '1'){
                                                            }
                                                          }
                                                          ?>
-                                                            <span class="timerBtn_<?php echo $tdetail->tid;?> timerBtn_new_<?php echo $tdetail->tid;?>" style="margin-left: 25px;font-size: 20px; margin-top: 2px;">
+                                                                             <?php
+                                                                    if ($tdetail->estimated_time) { ?>
+                                                                                                <span class="timerBtn_<?php echo $tdetail->tid;?> timerBtn_new_<?php echo $tdetail->tid;?>" style="margin-left: 25px;font-size: 20px; margin-top: 2px;">
                                                             <i class="bx bx-play-circle" onclick="toggleTimer3(<?php echo $tdetail->tid;?>);"></i>
                                                             </span>
                                                             <span class="counter_<?php echo $tdetail->tid;?> counter_modal_<?php echo $tdetail->tid;?>" data-id="<?php echo $tdetail->tid;?>" style="margin-left: 10px;font-size: 20px;"><?php echo $timer;?></span>
                                                             <input type="hidden" value="<?php echo $data_task->flag;?>" id="timer_flag_<?php echo $data_task->flag;?>" class="timer_flag_<?php echo $data_task->flag;?>"/>
+                                                            <?php }?>
                                                             <a href="javascript:void(0)" onclick="return tasks_delete('<?php echo $tdetail->tid;?>');" class="h3 eye_preview float-end me-1" style="padding: 0 !important;padding-top: 1px !important;font-size: 1.2rem;" title="Delete"><i class="mdi mdi-delete"></i></a>
                                                             <?php
                                                             $previous_url = $_SERVER['HTTP_REFERER'];
@@ -2522,11 +2525,16 @@ else{
                                                            }
                                                          }
                                                          ?>
+                                                          <?php 
+                                                        if($tdetail->estimated_time){ ?>
+ 
                                                             <span class="timerBtn_<?php echo $tdetail->tid;?> timerBtn_new_<?php echo $tdetail->tid;?>" style="margin-left: 25px;font-size: 20px; margin-top: 2px;">
                                                             <i class="bx bx-play-circle" onclick="toggleTimer3(<?php echo $tdetail->tid;?>);"></i>
                                                             </span>
                                                             <span class="counter_<?php echo $tdetail->tid;?> counter_modal_<?php echo $tdetail->tid;?>" data-id="<?php echo $tdetail->tid;?>" style="margin-left: 10px;font-size: 20px;"><?php echo $timer;?></span>
                                                             <input type="hidden" value="<?php echo $data_task->flag;?>" id="timer_flag_<?php echo $data_task->flag;?>" class="timer_flag_<?php echo $data_task->flag;?>"/>
+                                                            
+                                                            <?php }?>
                                                             <a href="javascript:void(0)" onclick="return tasks_delete('<?php echo $tdetail->tid;?>');" class="h3 eye_preview float-end me-1" style="padding: 0 !important;padding-top: 1px !important;font-size: 1.2rem;" title="Delete"><i class="mdi mdi-delete"></i></a>
                                                             <?php
                                                             $previous_url = $_SERVER['HTTP_REFERER'];

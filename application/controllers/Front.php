@@ -16404,7 +16404,7 @@ else
     $this->form_validation->set_rules('tdue_date','Due Date','trim|required');
     $this->form_validation->set_rules('portfolio_name','Portfolio','trim|required');
     $this->form_validation->set_rules('dept','Department','trim|required');
-    $this->form_validation->set_rules('estimated_time','Estimated Time','trim|required');
+    // $this->form_validation->set_rules('estimated_time','Estimated Time','trim|required');
       if ($this->form_validation->run() == FALSE)
       {
           //$errors = array();
@@ -22291,7 +22291,7 @@ else
     $this->form_validation->set_rules('tdue_date','Due Date','trim|required');
     $this->form_validation->set_rules('portfolio_name','Portfolio','trim|required');
     $this->form_validation->set_rules('dept','Department','trim|required');
-    $this->form_validation->set_rules('estimated_time','Estimated Time','trim|required');
+    // $this->form_validation->set_rules('estimated_time','Estimated Time','trim|required');
       if ($this->form_validation->run() == FALSE)
       {
           //$errors = array();
@@ -24905,7 +24905,7 @@ else{
     $this->form_validation->set_rules('tpriority','Subtask Priority','trim|required');
     $this->form_validation->set_rules('team_member2','Assignee','trim|required');
     $this->form_validation->set_rules('tdue_date','Due Date','trim|required');
-    $this->form_validation->set_rules('estimated_stime','Estimated Time','trim|required');
+    // $this->form_validation->set_rules('estimated_stime','Estimated Time','trim|required');
       if ($this->form_validation->run() == FALSE)
       {
           //$errors = array();

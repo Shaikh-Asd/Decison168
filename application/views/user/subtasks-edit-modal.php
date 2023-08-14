@@ -162,7 +162,21 @@ if($stdetail)
                                                     }
                                                     else
                                                     {
+                                                            if ($stdetail->estimated_stime) {
+                                                                $time_in = 'block';
+                                                                $checked = 'checked';
+                                                                $val = 'false';
+                                                            } else {
+                                                                $time_in = 'none';
+                                                                $checked = '';
+                                                                $val = 'true';
+                                                            }
                                                     ?>
+                                                      <div style=" margin-left: 375px;">
+                                                        <input type="checkbox" name="stask_track1" id="stask_track1" class="form-check-input" onclick="return subtaskTrack('1')" <?php echo $checked; ?>>
+                                                        <label class="control-label" for="stask_track">Track your subtask</label>
+                                                        <input type="hidden" name="strack_value_get1" id="strack_value_get1" value="<?php echo $val; ?>" >
+                                                    </div>
                                                     <div class="mb-2 col-md-5">
                                                         <label class="col-form-label">Attached File(s)</label>
                                                         <input class="form-control" id="tfile" name="tfile[]" multiple type="file" />
@@ -171,10 +185,10 @@ if($stdetail)
                                                     <div class="mb-2 col-md-1">
 
                                                     </div>
-                                                    <div class="mb-3 col-md-6">
+                                                    <div class="mb-3 col-md-6" id="staskTrack1" style="display:<?php echo $time_in; ?>">
                                                     <div class="form-group mb-2">
-                                                                <label for="estimated_stime" class="col-form-label">Estimated Time <span class="text-danger">*</span> (For example: XhXm)</label>
-                                                                <input id="estimated_stime" name="estimated_stime" type="text" class="form-control" placeholder="Enter time in hour format" required="" value="<?php echo $stdetail->estimated_stime;?>">
+                                                                <label for="estimated_stime" class="col-form-label">Estimated Time  (For example: XhXm)</label>
+                                                                <input id="estimated_stime1" name="estimated_stime" type="text" class="form-control" placeholder="Enter time in hour format"  value="<?php echo $stdetail->estimated_stime;?>">
                                                                 <div id="suggestionSContainer"></div>
                                                                 <span id="estimated_stimeErr" class="text-danger"></span>
                                                              </div>

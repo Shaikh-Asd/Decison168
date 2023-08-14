@@ -378,10 +378,10 @@ $check_project_invite_accepted_notify = $this->Front_model->check_project_invite
                                                 <div class="col-12 font-size-11">
                                                 Submit a <a href="javascript:void(0)" id="open_quoteModal" class="text-d">Quote</a> 
                                                 </div>
-                                            </div>                            
+                                            </div>                                                                        
                                         </div>
                                     </div>
-
+                                    <a href="<?php echo base_url('notes-list');?>" style="margin-left: 148px;" class="btn btn-d waves-effect waves-light btn-sm"><i class="fas fa-sticky-note"></i> Create Notes </a>
                                 </div>
                             </div>
                             </div>
