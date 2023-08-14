@@ -9604,7 +9604,7 @@ function SubtaskEditModal(id){
 
           setTimeout(function() {
 
-            var timeInput_snew = document.getElementById('estimated_stime');
+            var timeInput_snew = document.getElementById('estimated_stime1');
             var suggestionContainer_snew = document.getElementById('suggestionSContainer');
               if (timeInput_snew) {
                 timeInput_snew.addEventListener('input', () => {
@@ -17812,4 +17812,30 @@ function noteRedirectView(id,aid) {
   console.log(url5);
 
     window.location.href = url5; 
+}
+
+function taskTrack() {
+  // debugger;   
+  var check_new_value = $('#track_value_get').val();
+  if (check_new_value == 'true') {
+    $('#track_value_get').val("false");
+    $('#taskTrack').show();
+  } else {
+    $('#taskTrack').hide();
+    $('#track_value_get').val("true");
+    $('#estimated_time').val("");
+  }
+}
+function subtaskTrack(id) {
+  // debugger;   
+  var check_new_value = $('#strack_value_get'+id).val();
+  if (check_new_value == 'true') {
+    $('#strack_value_get'+id).val("false");
+    $('#staskTrack'+id).show();
+  } else {
+    $('#staskTrack'+ id).hide();
+    $('#strack_value_get'+id).val("true");
+    $('#estimated_stime'+id).val("");
+    // $('#estimated_stime'+ id).val("");
+  }
 }

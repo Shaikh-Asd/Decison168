@@ -1443,7 +1443,7 @@ $('#note_AddTeamMemberForm').on('submit',function(event){
         });
 
         
-
+        // function for multiple delete
         $(function() { 
   // alert('87');
 let isMouseDownNote = false;
